@@ -107,9 +107,9 @@ body {
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.08) 1px, transparent 1px);
-  background-size: 40px 40px;
+    linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+  background-size: 80px 80px;
 }
 
 /* Moving Vertical Lines */
@@ -121,10 +121,10 @@ body {
   height: 300%;
   background: repeating-linear-gradient(0deg,
       transparent 0px,
-      transparent 80px,
-      rgba(255, 122, 24, 0.25) 80px,
-      rgba(255, 122, 24, 0.25) 82px);
-  animation: moveVertical 6s linear infinite;
+      transparent 180px,
+      rgba(255, 122, 24, 0.12) 180px,
+      rgba(255, 122, 24, 0.12) 182px);
+  animation: moveVertical 18s linear infinite;
 }
 
 /* Moving Horizontal Lines */
@@ -136,10 +136,10 @@ body {
   bottom: 0;
   background: repeating-linear-gradient(90deg,
       transparent 0px,
-      transparent 60px,
-      rgba(201, 24, 255, 0.20) 60px,
-      rgba(201, 24, 255, 0.20) 62px);
-  animation: moveHorizontal 10s linear infinite;
+      transparent 150px,
+      rgba(201, 24, 255, 0.10) 150px,
+      rgba(201, 24, 255, 0.10) 152px);
+  animation: moveHorizontal 22s linear infinite;
 }
 
 @keyframes moveVertical {
@@ -148,7 +148,7 @@ body {
   }
 
   100% {
-    transform: translateY(80px);
+    transform: translateY(180px);
   }
 }
 
@@ -158,7 +158,7 @@ body {
   }
 
   100% {
-    transform: translateX(60px);
+    transform: translateX(150px);
   }
 }
 
@@ -243,12 +243,13 @@ body {
   margin-left: 25%;
   min-height: 100vh;
   position: relative;
-  background: var(--color-background);
+  background: #050505;
   z-index: 20;
+  isolation: isolate;
   /* Subtle inner shadow for depth */
   box-shadow:
-    -20px 0 60px rgba(0, 0, 0, 0.5),
-    20px 0 60px rgba(0, 0, 0, 0.5);
+    -20px 0 60px rgba(0, 0, 0, 0.8),
+    20px 0 60px rgba(0, 0, 0, 0.8);
 }
 
 /* Gradient edge glows that flow from side panels */

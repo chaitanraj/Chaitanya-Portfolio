@@ -1,5 +1,7 @@
 import { Space_Grotesk, Inter } from "next/font/google";
 import "./globals.css";
+import SideGrid from "@/components/SideGrid";
+import PipesBackground from "@/components/PipesBackground";
 
 const spaceGrotesk = Space_Grotesk({
   variable: "--font-heading",
@@ -33,30 +35,17 @@ export default function RootLayout({ children }) {
       >
         {/* Main Layout Container */}
         <div className="layout-wrapper">
-          {/* Left Side Panel with Grid Pattern */}
-          <div className="side-panel side-panel-left">
-            <div className="side-grid-base"></div>
-            <div className="side-grid-lines-v"></div>
-            <div className="side-grid-lines-h"></div>
-            <div className="side-orb side-orb-1"></div>
-            <div className="side-orb side-orb-2"></div>
-          </div>
+          {/* Side Panels - Easy to toggle on/off */}
+          <SideGrid enabled={true} showOrbs={false} showAnimatedLines={false} />
 
           {/* Main Content Area (50%) */}
           <div className="main-content-wrapper">
+            {/* Animated Pipes Background - only in main content */}
+            <PipesBackground />
             {/* Background effects inside main content */}
             <div className="mesh-gradient" />
             <div className="glow-blob-pink" />
             {children}
-          </div>
-
-          {/* Right Side Panel with Grid Pattern */}
-          <div className="side-panel side-panel-right">
-            <div className="side-grid-base"></div>
-            <div className="side-grid-lines-v"></div>
-            <div className="side-grid-lines-h"></div>
-            <div className="side-orb side-orb-3"></div>
-            <div className="side-orb side-orb-4"></div>
           </div>
         </div>
       </body>

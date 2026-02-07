@@ -7,16 +7,14 @@ import Experience from "@/components/Experience";
 import Education from "@/components/Education";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
-import TechStack2 from "@/components/TechStack2";
+import PipesBackground from "@/components/PipesBackground";
 
 export default function Home() {
   return (
     <main className="relative">
-      {/* <Navbar /> */}
       <Hero />
       <About />
       <TechStack />
-      {/* <TechStack2 /> */}
       <Projects />
       <Experience />
       <Education />

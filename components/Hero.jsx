@@ -56,7 +56,7 @@ export default function Hero() {
     return (
         <section
             id="hero"
-            className="min-h-screen flex items-center justify-center relative overflow-hidden"
+            className="pt-12 pb-16 relative overflow-hidden"
         >
             {/* Animated Gradient Orb */}
             <motion.div
@@ -64,10 +64,10 @@ export default function Hero() {
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 1.5, ease: "easeOut" }}
                 className="absolute top-1/4 right-0 w-[200px] h-[200px] rounded-full bg-[rgba(201,24,255,0.25)] blur-[100px]"
-                style={{ filter: "blur(100px)" }}
+                style={{ filter: "blur(100px)", zIndex: 1 }}
             />
 
-            <div className="section-container relative z-10 py-12">
+            <div className="section-container relative z-10 py-8">
                 {/* Two Column Layout: Name/Title + Terminal */}
                 <div className="flex flex-col lg:flex-row gap-8 items-center">
                     {/* Left Column: Name & Info */}
