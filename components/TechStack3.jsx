@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 import { motion, useInView } from "framer-motion";
 import {
   SiReact,
@@ -64,37 +64,45 @@ const skills = [
   { name: "Chrome Extensions", icon: FaChrome, color: "#4285F4" },
 ];
 
-// Single Skill Pill Component
-function SkillPill({ skill, index }) {
+// Single Skill Pill Component - Optimized for mobile performance
+function SkillPill({ skill, index, isMobile }) {
   const Icon = skill.icon;
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 12 }}
+      initial={{ opacity: 0, y: 8 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ delay: index * 0.02, duration: 0.35 }}
+      viewport={{ once: true, amount: 0.1 }}
+      // Faster animation on mobile, reduced stagger
+      transition={{
+        delay: isMobile ? Math.min(index * 0.01, 0.15) : index * 0.02,
+        duration: isMobile ? 0.2 : 0.35,
+        ease: "easeOut"
+      }}
       drag
       dragConstraints={{ left: 0, right: 0, top: 0, bottom: 0 }}
-      dragElastic={0.25}
-      whileHover={{
+      dragElastic={0.15}
+      // Simplified hover/tap for better performance
+      whileHover={isMobile ? undefined : {
         scale: 1.05,
         boxShadow:
           "0 0 20px rgba(255, 122, 24, 0.25), 0 0 40px rgba(201, 24, 255, 0.15)",
         borderColor: "rgba(255, 122, 24, 0.45)",
       }}
-      whileTap={{ scale: 0.98 }}
+      whileTap={{ scale: 0.96 }}
       className="
         inline-flex items-center justify-center
         gap-1.5 sm:gap-2 rounded-lg
         bg-[var(--color-glass-bg)] border border-dashed border-[var(--color-glass-border)]
-        backdrop-blur-md cursor-grab active:cursor-grabbing
-        shadow-md shadow-[var(--color-shadow-card)] hover:shadow-lg
-        transition-all duration-200
+        backdrop-blur-none sm:backdrop-blur-md
+        cursor-grab active:cursor-grabbing
+        shadow-sm sm:shadow-md shadow-[var(--color-shadow-card)] sm:hover:shadow-lg
+        transition-transform duration-150
 
         px-2.5 py-1 text-[11px]
         sm:px-4 sm:py-2 sm:text-sm
       "
+      style={{ willChange: 'transform' }}
     >
       <Icon
         className="shrink-0 h-3.5 w-3.5 sm:h-4 sm:w-4"
@@ -110,6 +118,16 @@ function SkillPill({ skill, index }) {
 export default function TechStack3() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
+
+  // Detect mobile for performance optimizations
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 640);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   return (
     <section id="skills" className="relative">
@@ -138,15 +156,15 @@ export default function TechStack3() {
               initial={{ opacity: 0, x: -10 }}
               animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -10 }}
               transition={{ delay: 0.3 }}
-              className="hidden sm:flex items-center gap-1 theme-text-muted text-lg italic font-extrabold mb-2"
+              className="flex items-center gap-1 theme-text-muted text-xs sm:text-lg italic font-extrabold mb-1 sm:mb-2"
             >
               <span>Drag me!</span>
               <svg
-                width="22"
-                height="22"
+                width="16"
+                height="16"
                 viewBox="0 0 24 24"
                 fill="none"
-                className="theme-text-muted rotate-[180deg]"
+                className="theme-text-muted rotate-[180deg] sm:w-[22px] sm:h-[22px]"
               >
                 <path
                   d="M7 17L17 7M17 7H8M17 7V16"
@@ -169,7 +187,7 @@ export default function TechStack3() {
             "
           >
             {skills.map((skill, index) => (
-              <SkillPill key={skill.name} skill={skill} index={index} />
+              <SkillPill key={skill.name} skill={skill} index={index} isMobile={isMobile} />
             ))}
           </motion.div>
         </motion.div>

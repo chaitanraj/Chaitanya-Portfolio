@@ -77,7 +77,7 @@ export default function Hero() {
 
       <div className="section-container relative z-10 py-10 sm:py-16">
         {/* Two Column Layout */}
-        <div className="flex flex-col lg:flex-row gap-8 sm:gap-10 items-center">
+        <div className="flex flex-col lg:flex-row gap-8 sm:gap-10 lg:items-center">
           {/* Left Column */}
           <div className="flex-1 text-left">
             {/* Greeting */}

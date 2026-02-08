@@ -274,22 +274,7 @@ export default function Projects() {
     setModalOpen(true);
   };
 
-  useEffect(() => {
-    const container = scrollRef.current;
-    if (!container) return;
 
-    const isFinePointer = window.matchMedia("(pointer: fine)").matches;
-    if (!isFinePointer) return;
-
-    const onWheel = (event) => {
-      if (Math.abs(event.deltaY) <= Math.abs(event.deltaX)) return;
-      event.preventDefault();
-      container.scrollBy({ left: event.deltaY, behavior: "auto" });
-    };
-
-    container.addEventListener("wheel", onWheel, { passive: false });
-    return () => container.removeEventListener("wheel", onWheel);
-  }, []);
 
   return (
     <section id="projects" className="relative overflow-hidden">
