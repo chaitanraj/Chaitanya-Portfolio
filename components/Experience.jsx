@@ -65,13 +65,13 @@ export default function Experience() {
                                                     <Briefcase size={24} className="text-[#ff7a18]" />
                                                 </div>
                                                 <div className="flex-1">
-                                                    <h3 className="text-lg font-bold heading-font text-white">
+                                                    <h3 className="text-lg font-bold heading-font text-text-primary">
                                                         {exp.role}
                                                     </h3>
                                                     <p className="text-[#ff9a3d] font-medium">
                                                         {exp.company}
                                                     </p>
-                                                    <div className="flex items-center gap-2 text-[rgba(255,255,255,0.5)] mt-1">
+                                                    <div className="flex items-center gap-2 text-text-muted mt-1">
                                                         <Calendar size={14} />
                                                         <span className="text-sm text-[#ff7a18]">{exp.duration}</span>
                                                     </div>
@@ -81,7 +81,7 @@ export default function Experience() {
                                             {/* Bullet Points */}
                                             <ul className="mt-4 space-y-2">
                                                 {exp.bullets.map((bullet, i) => (
-                                                    <li key={i} className="flex items-start gap-2 text-[rgba(255,255,255,0.5)] text-sm">
+                                                    <li key={i} className="flex items-start gap-2 text-text-muted text-sm">
                                                         <span className="text-[#ff7a18] mt-1">▸</span>
                                                         <span>{bullet}</span>
                                                     </li>

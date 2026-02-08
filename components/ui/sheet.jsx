@@ -57,7 +57,7 @@ export function SheetContent({ children, className, side = "right", ...props }) 
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                         onClick={() => onOpenChange(false)}
-                        className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[100]"
+                        className="fixed inset-0 theme-overlay z-[100]"
                     />
 
                     {/* Sheet */}
@@ -77,9 +77,9 @@ export function SheetContent({ children, className, side = "right", ...props }) 
                     >
                         <button
                             onClick={() => onOpenChange(false)}
-                            className="absolute right-4 top-4 p-2 rounded-lg hover:bg-white/10 transition-colors"
+                            className="absolute right-4 top-4 p-2 rounded-lg hover:bg-[var(--color-glass-bg)] transition-colors"
                         >
-                            <X size={20} style={{ color: 'var(--text-muted)' }} />
+                            <X size={20} className="theme-text-muted" />
                         </button>
                         {children}
                     </motion.div>

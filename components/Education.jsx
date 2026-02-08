@@ -47,14 +47,14 @@ export default function Education() {
 
                         <div className="flex flex-col md:flex-row gap-6">
                             {/* Icon */}
-                            <div className="w-20 h-20 rounded-2xl border border-white/10 flex items-center justify-center group-hover:scale-110 transition-transform"
+                            <div className="w-20 h-20 rounded-2xl border border-[var(--color-glass-border)] flex items-center justify-center group-hover:scale-110 transition-transform"
                                 style={{ background: "linear-gradient(135deg, rgba(255,122,24,0.2), rgba(201,24,255,0.2))" }}>
                                 <GraduationCap size={40} className="text-[#ff7a18]" />
                             </div>
 
                             {/* Content */}
                             <div className="flex-1">
-                                <h3 className="text-xl font-bold heading-font text-white">
+                                <h3 className="text-xl font-bold heading-font text-text-primary">
                                     {education.degree}
                                 </h3>
                                 <p className="text-[#c918ff] font-medium text-lg">
@@ -63,19 +63,19 @@ export default function Education() {
 
                                 {/* Stats */}
                                 <div className="flex flex-wrap gap-6 mt-6">
-                                    <div className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#0B0B0F] border border-white/5">
+                                    <div className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[var(--color-background-secondary)] border border-[var(--color-divider)]">
                                         <Award size={18} className="text-[#ff7a18]" />
                                         <div>
-                                            <span className="text-[rgba(255,255,255,0.5)] text-xs block">GPA</span>
-                                            <span className="text-white font-bold">{education.gpa}</span>
+                                            <span className="text-text-muted text-xs block">GPA</span>
+                                            <span className="text-text-primary font-bold">{education.gpa}</span>
                                         </div>
                                     </div>
 
-                                    <div className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#0B0B0F] border border-white/5">
+                                    <div className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[var(--color-background-secondary)] border border-[var(--color-divider)]">
                                         <Calendar size={18} className="text-[#c918ff]" />
                                         <div>
-                                            <span className="text-[rgba(255,255,255,0.5)] text-xs block">Expected</span>
-                                            <span className="text-white font-bold">{education.year}</span>
+                                            <span className="text-text-muted text-xs block">Expected</span>
+                                            <span className="text-text-primary font-bold">{education.year}</span>
                                         </div>
                                     </div>
                                 </div>

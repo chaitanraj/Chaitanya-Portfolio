@@ -242,31 +242,6 @@ export default function PipesBackground() {
         }
     }, []);
 
-    const animate = useCallback(() => {
-        const canvas = canvasRef.current;
-        if (!canvas) return;
-
-        const ctx = canvas.getContext("2d");
-        const width = canvas.width;
-        const height = canvas.height;
-        const centerX = width / 2;
-        const centerY = height / 2;
-
-        // Clear canvas
-        ctx.clearRect(0, 0, width, height);
-
-        // Draw grid
-        drawGrid(ctx, width, height, centerX, centerY);
-
-        // Update and draw pipes
-        pipesRef.current.forEach((pipe) => {
-            pipe.update();
-            pipe.draw(ctx, centerX, centerY);
-        });
-
-        animationRef.current = requestAnimationFrame(animate);
-    }, [drawGrid]);
-
     useEffect(() => {
         const canvas = canvasRef.current;
         if (!canvas) return;
@@ -284,7 +259,25 @@ export default function PipesBackground() {
         window.addEventListener("resize", handleResize);
 
         // Start animation
-        animate();
+        const render = () => {
+            const ctx = canvas.getContext("2d");
+            const width = canvas.width;
+            const height = canvas.height;
+            const centerX = width / 2;
+            const centerY = height / 2;
+
+            ctx.clearRect(0, 0, width, height);
+            drawGrid(ctx, width, height, centerX, centerY);
+
+            pipesRef.current.forEach((pipe) => {
+                pipe.update();
+                pipe.draw(ctx, centerX, centerY);
+            });
+
+            animationRef.current = requestAnimationFrame(render);
+        };
+
+        render();
 
         return () => {
             window.removeEventListener("resize", handleResize);
@@ -292,7 +285,7 @@ export default function PipesBackground() {
                 cancelAnimationFrame(animationRef.current);
             }
         };
-    }, [initPipes, animate]);
+    }, [initPipes, drawGrid]);
 
     return (
         <canvas

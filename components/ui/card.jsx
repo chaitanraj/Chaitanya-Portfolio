@@ -41,7 +41,7 @@ const CardContent = forwardRef(({ className, ...props }, ref) => (
 CardContent.displayName = "CardContent";
 
 const CardFooter = forwardRef(({ className, ...props }, ref) => (
-    <div ref={ref} className={cn("flex items-center gap-3 mt-4 pt-4 border-t border-white/10", className)} {...props} />
+    <div ref={ref} className={cn("flex items-center gap-3 mt-4 pt-4 border-t theme-divider", className)} {...props} />
 ));
 CardFooter.displayName = "CardFooter";
 

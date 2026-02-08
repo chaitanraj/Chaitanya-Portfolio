@@ -126,14 +126,14 @@ export default function TechStack() {
                         initial={{ opacity: 0, y: 30 }}
                         animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
                         transition={{ duration: 0.6, delay: 0.1 }}
-                        className="text-center mb-10"
+                        className="text-left mb-10"
                     >
                         <h2 className="text-heading font-bold heading-font text-gradient mb-3">
                             Tech Stack
                         </h2>
-                        <p className="text-sm text-[rgba(255,255,255,0.6)] max-w-lg mx-auto">
+                        <h3 className="text-sm text-left text-[rgba(255,255,255,0.6)] max-w-lg">
                             Technologies I use to build scalable full-stack and AI-powered applications.
-                        </p>
+                        </h3>
                     </motion.div>
 
                     {/* Marquee Section */}
@@ -149,24 +149,6 @@ export default function TechStack() {
                             <MarqueeRow skills={row3Skills} direction="left" duration={28} />
                         </div>
                     </motion.div>
-
-                    {/* Categorized Cards Grid */}
-                    {/* <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={isInView ? { opacity: 1 } : { opacity: 0 }}
-                        transition={{ duration: 0.6, delay: 0.4 }}
-                    >
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                            {categories.map((category, index) => (
-                                <CategoryCard
-                                    key={category.key}
-                                    category={category}
-                                    skills={skillsData[category.key]}
-                                    index={index}
-                                />
-                            ))}
-                        </div>
-                    </motion.div> */}
                 </motion.div>
             </div>
         </section>

@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -46,7 +46,7 @@ export function DialogContent({ children, className, ...props }) {
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                         onClick={() => onOpenChange(false)}
-                        className="fixed inset-0 bg-black/80 backdrop-blur-sm z-[200]"
+                        className="fixed inset-0 theme-overlay z-[200]"
                     />
 
                     {/* Dialog */}
@@ -65,7 +65,7 @@ export function DialogContent({ children, className, ...props }) {
                     >
                         <button
                             onClick={() => onOpenChange(false)}
-                            className="absolute right-4 top-4 p-1 rounded-lg hover:bg-white/10 transition-colors"
+                            className="absolute right-4 top-4 p-1 rounded-lg hover:bg-[var(--color-glass-bg)] transition-colors"
                         >
                             <X size={20} className="text-text-muted" />
                         </button>

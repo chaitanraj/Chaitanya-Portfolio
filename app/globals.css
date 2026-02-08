@@ -12,6 +12,7 @@
   --color-background: #050505;
   --color-background-secondary: #0B0B0F;
   --color-background-tertiary: #121216;
+  --color-side-panel-bg: #020202;
   --color-section-overlay: rgba(0, 0, 0, 0.35);
   --color-glass-tint: rgba(255, 255, 255, 0.04);
 
@@ -29,16 +30,66 @@
 
   /* Glass Effects */
   --color-glass-bg: rgba(255, 255, 255, 0.05);
+  --color-glass-bg-strong: rgba(255, 255, 255, 0.1);
   --color-glass-border: rgba(255, 255, 255, 0.08);
+  --color-divider: rgba(255, 255, 255, 0.1);
 
   /* Glow Colors */
   --color-glow-orange: rgba(255, 122, 24, 0.35);
   --color-glow-pink: rgba(255, 77, 109, 0.25);
   --color-glow-purple: rgba(201, 24, 255, 0.35);
 
+  /* Grid Colors */
+  --color-grid-base: rgba(255, 255, 255, 0.04);
+  --color-grid-line-v: rgba(255, 122, 24, 0.12);
+  --color-grid-line-h: rgba(201, 24, 255, 0.1);
+
+  /* Shadows and Overlays */
+  --color-shadow-heavy: rgba(0, 0, 0, 0.8);
+  --color-shadow-card: rgba(0, 0, 0, 0.5);
+  --color-overlay-bg: rgba(0, 0, 0, 0.75);
+  --color-navbar-bg: rgba(5, 5, 5, 0.85);
+  --color-navbar-border: rgba(255, 255, 255, 0.06);
+  --color-tooltip-bg: rgba(0, 0, 0, 0.8);
+  --color-tooltip-border: rgba(255, 255, 255, 0.15);
+  --color-tooltip-text: rgba(255, 255, 255, 0.72);
+
   /* Fonts */
   --font-sans: 'Inter', sans-serif;
   --font-heading: 'Space Grotesk', sans-serif;
+}
+
+:root.theme-light {
+  --color-background: #f5f6fb;
+  --color-background-secondary: #ffffff;
+  --color-background-tertiary: #e6e9f2;
+  --color-side-panel-bg: #edf1fa;
+  --color-section-overlay: rgba(255, 255, 255, 0.45);
+  --color-glass-tint: rgba(255, 255, 255, 0.6);
+
+  --color-text-primary: #131622;
+  --color-text-secondary: rgba(19, 22, 34, 0.72);
+  --color-text-muted: rgba(19, 22, 34, 0.6);
+  --color-text-disabled: rgba(19, 22, 34, 0.4);
+
+  --color-glass-bg: rgba(255, 255, 255, 0.72);
+  --color-glass-bg-strong: rgba(255, 255, 255, 0.92);
+  --color-glass-border: rgba(19, 22, 34, 0.15);
+  --color-divider: rgba(19, 22, 34, 0.15);
+
+  --color-glow-orange: rgba(255, 122, 24, 0.22);
+  --color-glow-pink: rgba(255, 77, 109, 0.2);
+  --color-glow-purple: rgba(201, 24, 255, 0.22);
+
+  --color-grid-base: rgba(19, 22, 34, 0.06);
+  --color-grid-line-v: rgba(255, 122, 24, 0.16);
+  --color-grid-line-h: rgba(201, 24, 255, 0.14);
+
+  --color-shadow-heavy: rgba(12, 20, 38, 0.22);
+  --color-shadow-card: rgba(12, 20, 38, 0.14);
+  --color-overlay-bg: rgba(12, 20, 38, 0.45);
+  --color-navbar-bg: rgba(245, 246, 251, 0.88);
+  --color-navbar-border: rgba(19, 22, 34, 0.12);
 }
 
 /* ============================================
@@ -65,6 +116,45 @@ body {
   padding: 0;
 }
 
+.theme-text-primary {
+  color: var(--color-text-primary);
+}
+
+.theme-text-secondary {
+  color: var(--color-text-secondary);
+}
+
+.theme-text-muted {
+  color: var(--color-text-muted);
+}
+
+.theme-surface {
+  background: var(--color-glass-bg);
+  border-color: var(--color-glass-border);
+}
+
+.theme-surface-strong {
+  background: var(--color-glass-bg-strong);
+}
+
+.theme-divider {
+  border-color: var(--color-divider);
+}
+
+.theme-tooltip {
+  background: var(--color-tooltip-bg);
+  border: 1px solid var(--color-tooltip-border);
+  color: var(--color-tooltip-text);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 10px 30px var(--color-shadow-card);
+}
+
+.theme-overlay {
+  background: var(--color-overlay-bg);
+  backdrop-filter: blur(6px);
+}
+
 /* Heading font class */
 .heading-font {
   font-family: var(--font-heading);
@@ -87,7 +177,7 @@ body {
   min-height: 100vh;
   position: fixed;
   top: 0;
-  background: #020202;
+  background: var(--color-side-panel-bg);
   z-index: 10;
   overflow: hidden;
 }
@@ -107,8 +197,8 @@ body {
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+    linear-gradient(var(--color-grid-base) 1px, transparent 1px),
+    linear-gradient(90deg, var(--color-grid-base) 1px, transparent 1px);
   background-size: 80px 80px;
 }
 
@@ -122,8 +212,8 @@ body {
   background: repeating-linear-gradient(0deg,
       transparent 0px,
       transparent 180px,
-      rgba(255, 122, 24, 0.12) 180px,
-      rgba(255, 122, 24, 0.12) 182px);
+      var(--color-grid-line-v) 180px,
+      var(--color-grid-line-v) 182px);
   animation: moveVertical 18s linear infinite;
 }
 
@@ -137,8 +227,8 @@ body {
   background: repeating-linear-gradient(90deg,
       transparent 0px,
       transparent 150px,
-      rgba(201, 24, 255, 0.10) 150px,
-      rgba(201, 24, 255, 0.10) 152px);
+      var(--color-grid-line-h) 150px,
+      var(--color-grid-line-h) 152px);
   animation: moveHorizontal 22s linear infinite;
 }
 
@@ -243,13 +333,13 @@ body {
   margin-left: 25%;
   min-height: 100vh;
   position: relative;
-  background: #050505;
+  background: var(--color-background);
   z-index: 20;
   isolation: isolate;
   /* Subtle inner shadow for depth */
   box-shadow:
-    -20px 0 60px rgba(0, 0, 0, 0.8),
-    20px 0 60px rgba(0, 0, 0, 0.8);
+    -20px 0 60px var(--color-shadow-heavy),
+    20px 0 60px var(--color-shadow-heavy);
 }
 
 /* Gradient edge glows that flow from side panels */
@@ -357,19 +447,19 @@ body {
    ============================================ */
 
 .glass-card {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: var(--color-glass-bg);
+  border: 1px solid var(--color-glass-border);
   border-radius: 20px;
   backdrop-filter: blur(18px);
   -webkit-backdrop-filter: blur(18px);
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 12px 40px var(--color-shadow-card);
   transition: all 0.4s ease;
 }
 
 .glass-card:hover {
   border-color: rgba(255, 122, 24, 0.3);
   box-shadow:
-    0 12px 40px rgba(0, 0, 0, 0.5),
+    0 12px 40px var(--color-shadow-card),
     0 0 20px rgba(255, 122, 24, 0.12),
     0 0 30px rgba(201, 24, 255, 0.1);
 }
@@ -411,11 +501,11 @@ body {
 
 .terminal {
   background: var(--color-background-secondary);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--color-glass-border);
   border-radius: 14px;
   font-family: 'Fira Code', 'Consolas', monospace;
   overflow: hidden;
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 12px 40px var(--color-shadow-card);
 }
 
 .terminal-header {
@@ -423,8 +513,8 @@ body {
   align-items: center;
   gap: 6px;
   padding: 10px 14px;
-  background: rgba(255, 255, 255, 0.02);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  background: var(--color-glass-bg);
+  border-bottom: 1px solid var(--color-glass-border);
 }
 
 .terminal-dot {
@@ -497,8 +587,8 @@ body {
    ============================================ */
 
 .input-neon {
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--color-glass-bg);
+  border: 1px solid var(--color-glass-border);
   border-radius: 10px;
   padding: 12px 16px;
   color: var(--color-text-primary);
@@ -584,7 +674,7 @@ body {
   left: -10%;
   width: 350px;
   height: 350px;
-  background: rgba(255, 122, 24, 0.3);
+  background: var(--color-glow-orange);
   border-radius: 50%;
   filter: blur(150px);
   animation: floatLeft 15s ease-in-out infinite;
@@ -597,7 +687,7 @@ body {
   right: -5%;
   width: 400px;
   height: 400px;
-  background: rgba(201, 24, 255, 0.3);
+  background: var(--color-glow-purple);
   border-radius: 50%;
   filter: blur(180px);
   animation: floatRight 18s ease-in-out infinite;
@@ -634,7 +724,7 @@ body {
   left: 30%;
   width: 300px;
   height: 300px;
-  background: rgba(255, 77, 109, 0.2);
+  background: var(--color-glow-pink);
   border-radius: 50%;
   filter: blur(150px);
   z-index: -1;
@@ -680,15 +770,20 @@ body::before {
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
 }
 
+:root.theme-light body::before {
+  opacity: 0.03;
+  mix-blend-mode: multiply;
+}
+
 /* ============================================
    NAVBAR STYLING - Glass Strip (within main content)
    ============================================ */
 
 .navbar-glass {
-  background: rgba(5, 5, 5, 0.85);
+  background: var(--color-navbar-bg);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  border-bottom: 1px solid var(--color-navbar-border);
 }
 
 .nav-link-active {
@@ -700,9 +795,9 @@ body::before {
    ============================================ */
 
 .mobile-menu {
-  background: rgba(11, 11, 15, 0.98);
+  background: var(--color-background-secondary);
   backdrop-filter: blur(20px);
-  border-left: 1px solid rgba(255, 255, 255, 0.1);
+  border-left: 1px solid var(--color-glass-border);
 }
 
 /* ============================================
@@ -776,4 +871,84 @@ body::before {
   box-shadow:
     0 0 20px rgba(255, 122, 24, 0.15),
     0 0 30px rgba(201, 24, 255, 0.12);
+}
+
+/* ============================================
+   MOBILE RESPONSIVE FIXES (IMPORTANT)
+   ============================================ */
+
+/* Better scaling for tablets */
+@media (max-width: 1024px) {
+  .main-content-wrapper {
+    width: 100%;
+    margin-left: 0;
+    box-shadow: none;
+  }
+
+  .main-content-wrapper::before,
+  .main-content-wrapper::after {
+    display: none;
+  }
+
+  .text-display {
+    font-size: clamp(2rem, 7vw, 3rem);
+  }
+
+  .text-heading {
+    font-size: clamp(1.4rem, 5vw, 2.2rem);
+  }
+}
+
+/* Mobile Optimization */
+@media (max-width: 640px) {
+  body {
+    overflow-x: hidden;
+  }
+
+  .section-container {
+    padding: 38px 16px;
+  }
+
+  .glass-card {
+    border-radius: 16px;
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+  }
+
+  .horizontal-scroll-container {
+    gap: 14px;
+    padding: 12px 0;
+  }
+
+  .terminal-header {
+    padding: 8px 12px;
+  }
+
+  .terminal-dot {
+    width: 8px;
+    height: 8px;
+  }
+
+  .cursor-blink {
+    height: 14px;
+  }
+}
+
+/* Extra small phones */
+@media (max-width: 400px) {
+  .section-container {
+    padding: 30px 14px;
+  }
+
+  .text-display {
+    font-size: 2rem;
+  }
+
+  .text-heading {
+    font-size: 1.6rem;
+  }
+
+  .text-subheading {
+    font-size: 0.95rem;
+  }
 }

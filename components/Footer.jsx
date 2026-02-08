@@ -1,43 +1,21 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Heart } from "lucide-react";
-import { personalInfo } from "@/lib/data";
 
 export default function Footer() {
-    return (
-        <footer className="border-t border-white/5">
-            <div className="section-container py-8">
-                <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-                    {/* Made with love */}
-                    <motion.div
-                        initial={{ opacity: 0 }}
-                        whileInView={{ opacity: 1 }}
-                        transition={{ delay: 0.2 }}
-                        className="flex items-center gap-2 text-[rgba(255,255,255,0.5)]"
-                    >
-                        <span>Made with</span>
-                        <motion.div
-                            animate={{ scale: [1, 1.2, 1] }}
-                            transition={{ duration: 1, repeat: Infinity }}
-                        >
-                            <Heart size={16} className="text-[#ff4d6d] fill-[#ff4d6d]" />
-                        </motion.div>
-                        <span>by</span>
-                        <span className="text-gradient font-semibold">{personalInfo.name}</span>
-                    </motion.div>
-
-                    {/* Copyright */}
-                    <motion.div
-                        initial={{ opacity: 0 }}
-                        whileInView={{ opacity: 1 }}
-                        transition={{ delay: 0.3 }}
-                        className="text-[rgba(255,255,255,0.5)] text-sm"
-                    >
-                        © {new Date().getFullYear()} All rights reserved.
-                    </motion.div>
-                </div>
-            </div>
-        </footer>
-    );
+  return (
+    <footer className="border-t theme-divider pb-15">
+      <div className="section-container">
+        <motion.p
+          initial={{ opacity: 0, y: 10 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="text-center text-md text-text-secondary italic"
+        >
+          &quot; ...miles to go before I sleep &quot;
+          <br></br>  Robert Frost
+        </motion.p>
+      </div>
+    </footer>
+  );
 }

@@ -8,7 +8,7 @@ const variants = {
     // Purple variant
     purple: "bg-[rgba(201,24,255,0.08)] text-[#c918ff] border border-[rgba(201,24,255,0.35)]",
     // Outline variant
-    outline: "bg-transparent text-[rgba(255,255,255,0.7)] border border-white/10 hover:border-white/20",
+    outline: "bg-transparent text-text-secondary border border-[var(--color-glass-border)] hover:border-[var(--color-divider)]",
 };
 
 export function Badge({ children, variant = "default", className, ...props }) {

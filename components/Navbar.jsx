@@ -2,16 +2,18 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, Moon } from "lucide-react";
+import { motion } from "framer-motion";
+import { Menu, Moon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { navLinks, personalInfo } from "@/lib/data";
+import { useTheme } from "@/components/ThemeProvider";
 
 export default function Navbar() {
     const [isScrolled, setIsScrolled] = useState(false);
     const [activeSection, setActiveSection] = useState("hero");
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+    const { toggleTheme } = useTheme();
 
     useEffect(() => {
         const handleScroll = () => {
@@ -82,7 +84,7 @@ export default function Navbar() {
                                 whileTap={{ scale: 0.95 }}
                                 className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${activeSection === link.href.replace("#", "")
                                     ? "text-[#ff7a18] bg-[#ff7a18]/10"
-                                    : "text-[rgba(255,255,255,0.6)] hover:text-white hover:bg-white/5"
+                                    : "text-[color:var(--color-text-secondary)] hover:text-[color:var(--color-text-primary)] hover:bg-[var(--color-glass-bg)]"
                                     }`}
                             >
                                 {link.name}
@@ -92,7 +94,9 @@ export default function Navbar() {
                         <motion.button
                             whileHover={{ scale: 1.1 }}
                             whileTap={{ scale: 0.95 }}
-                            className="ml-1 p-1.5 rounded-lg text-[rgba(255,255,255,0.4)] hover:text-[#ff7a18] hover:bg-white/5 transition-all"
+                            onClick={toggleTheme}
+                            className="ml-1 p-1.5 rounded-lg text-[color:var(--color-text-muted)] hover:text-[#ff7a18] hover:bg-[var(--color-glass-bg)] transition-all"
+                            aria-label="Toggle theme"
                         >
                             <Moon size={14} />
                         </motion.button>
@@ -102,8 +106,8 @@ export default function Navbar() {
                     <div className="md:hidden">
                         <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
                             <SheetTrigger asChild>
-                                <button className="p-2 rounded-lg hover:bg-white/5 transition-colors">
-                                    <Menu size={20} className="text-white" />
+                                <button className="p-2 rounded-lg hover:bg-[var(--color-glass-bg)] transition-colors">
+                                    <Menu size={20} className="theme-text-primary" />
                                 </button>
                             </SheetTrigger>
                             <SheetContent side="right">
@@ -115,13 +119,13 @@ export default function Navbar() {
                                             whileTap={{ scale: 0.95 }}
                                             className={`px-4 py-2.5 rounded-lg text-left text-sm font-medium transition-all ${activeSection === link.href.replace("#", "")
                                                 ? "text-[#ff7a18] bg-[#ff7a18]/10"
-                                                : "text-[rgba(255,255,255,0.7)] hover:text-white hover:bg-white/5"
+                                                : "text-[color:var(--color-text-secondary)] hover:text-[color:var(--color-text-primary)] hover:bg-[var(--color-glass-bg)]"
                                                 }`}
                                         >
                                             {link.name}
                                         </motion.button>
                                     ))}
-                                    <div className="pt-4 border-t border-white/10">
+                                    <div className="pt-4 border-t theme-divider">
                                         <Button variant="primary" className="w-full" size="sm" asChild>
                                             <a href={personalInfo.resumeUrl} target="_blank" rel="noopener noreferrer">
                                                 Resume
