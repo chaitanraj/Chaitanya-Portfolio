@@ -124,7 +124,7 @@ export default function FloatingDock() {
                 <div className="w-px h-[14px] sm:h-5 bg-[var(--color-divider)] mx-0.5 sm:mx-1" />
                 <button
                     onClick={toggleTheme}
-                    className="group/icon relative flex items-center justify-center w-[30px] h-[30px] sm:w-9 sm:h-9 rounded-full text-[color:var(--color-text-muted)] hover:text-[color:var(--color-text-primary)] hover:bg-[var(--color-glass-bg)] hover:shadow-[0_0_25px_rgba(255,122,24,0.18)] hover:mx-2 transition-all duration-200 cursor-pointer"
+                    className="group/icon relative flex items-center justify-center w-[40px] h-[30px] sm:w-15 sm:h-9 rounded-full text-[color:var(--color-text-muted)] hover:text-[color:var(--color-text-primary)] hover:bg-[var(--color-glass-bg)] hover:shadow-[0_0_25px_rgba(255,122,24,0.18)] hover:mx-2 transition-all duration-200 cursor-pointer"
                     aria-label="Toggle Theme"
                 >
                     {resolvedIsDark ? (

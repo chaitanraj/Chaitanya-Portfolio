@@ -36,7 +36,7 @@ function ProjectCard({ project, index, onClick, reduceMotion }) {
       whileHover={cardHoverAnimation}
     >
       {/* Project Cover Image */}
-      <div className="relative h-36 sm:h-52 lg:h-56 overflow-hidden">
+      <div className="relative h-36 sm:h-42 lg:h-56 overflow-hidden">
         {project.image ? (
           <Image
             src={project.image}
@@ -73,7 +73,7 @@ function ProjectCard({ project, index, onClick, reduceMotion }) {
           {project.title}
         </h3>
 
-        <p className="theme-text-secondary text-[11px] sm:text-sm leading-relaxed line-clamp-3 mb-3.5 sm:mb-4">
+        <p className="theme-text-secondary text-[11px] sm:text-sm leading-relaxed mb-3.5 sm:mb-4">
           {project.description}
         </p>
 
@@ -359,7 +359,7 @@ export default function Projects() {
           <div className="relative">
             <div
               ref={scrollRef}
-              className="horizontal-scroll-container pb-3 sm:pb-5 px-[calc(50%_-_124px)] sm:px-[calc(50%_-_170px)] lg:px-[calc(50%_-_210px)]"
+              className="horizontal-scroll-container ml-2 pb-3 sm:pb-5 px-[calc(50%_-_124px)] sm:px-[calc(50%_-_170px)] lg:px-[calc(50%_-_210px)]"
             >
               {projects.map((project, index) => (
                 <ProjectCard
@@ -378,12 +378,12 @@ export default function Projects() {
           </div>
 
           {/* Scroll Hint - Mobile */}
-          <div className="flex md:hidden justify-center mt-4">
-            <span className="flex items-center gap-2 text-xs sm:text-sm theme-text-muted">
+          <div className="flex md:hidden justify-center">
+            <span className="flex items-center gap-2 text-md sm:text-sm theme-text-muted">
 
-              <ChevronLeft size={16} className="opacity-60" />
-              Browse projects
-              <ChevronRight size={16} className="opacity-60" />
+              {/* <ChevronLeft size={16} className="opacity-60" /> */}
+              Swipe to Browse projects
+              {/* <ChevronRight size={16} className="opacity-60" /> */}
             </span>
 
           </div>

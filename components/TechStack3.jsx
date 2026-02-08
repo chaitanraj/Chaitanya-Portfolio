@@ -98,7 +98,6 @@ function SkillPill({ skill, index, isMobile }) {
         cursor-grab active:cursor-grabbing
         shadow-sm sm:shadow-md shadow-[var(--color-shadow-card)] sm:hover:shadow-lg
         transition-transform duration-150
-
         px-2.5 py-1 text-[11px]
         sm:px-4 sm:py-2 sm:text-sm
       "
@@ -156,15 +155,15 @@ export default function TechStack3() {
               initial={{ opacity: 0, x: -10 }}
               animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -10 }}
               transition={{ delay: 0.3 }}
-              className="flex items-center gap-1 theme-text-muted text-xs sm:text-lg italic font-extrabold mb-1 sm:mb-2"
+              className="flex items-center gap-1 theme-text-muted text-md sm:text-lg italic font-bold mb-1 sm:mb-2"
             >
-              <span>Drag me!</span>
+              <span className="text-gray-300">Drag me!</span>
               <svg
                 width="16"
                 height="16"
                 viewBox="0 0 24 24"
                 fill="none"
-                className="theme-text-muted rotate-[180deg] sm:w-[22px] sm:h-[22px]"
+                className="theme-text-muted text-gray-300 font-bold rotate-[180deg] sm:w-[22px] sm:h-[22px]"
               >
                 <path
                   d="M7 17L17 7M17 7H8M17 7V16"
