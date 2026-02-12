@@ -3,8 +3,8 @@
 import { useEffect, useState } from "react";
 import PortfolioPreloader from "@/components/PortfolioPreloader";
 
-const MIN_PRELOADER_MS = 600;
-const PRELOADER_FADE_MS = 420;
+const MIN_PRELOADER_MS = 800;
+const PRELOADER_FADE_MS = 600;
 
 export default function InitialLoadGate({ children }) {
   const [showPreloader, setShowPreloader] = useState(true);
@@ -49,7 +49,7 @@ export default function InitialLoadGate({ children }) {
   return (
     <>
       <div
-        className={`transition-opacity duration-500 ${showPreloader ? "opacity-0 pointer-events-none select-none" : "opacity-100"}`}
+        className={`content-reveal ${showPreloader ? "" : "content-visible"}`}
         aria-hidden={showPreloader}
       >
         {children}
@@ -57,7 +57,7 @@ export default function InitialLoadGate({ children }) {
 
       {renderPreloader && (
         <PortfolioPreloader
-          className={`transition-opacity duration-[420ms] ${showPreloader ? "opacity-100" : "opacity-0 pointer-events-none"}`}
+          className={`preloader-fade ${showPreloader ? "" : "preloader-exit"}`}
         />
       )}
     </>

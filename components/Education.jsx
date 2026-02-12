@@ -7,22 +7,22 @@ import { education } from "@/lib/data";
 
 export default function Education() {
     const ref = useRef(null);
-    const isInView = useInView(ref, { once: true, margin: "-100px" });
+    const isInView = useInView(ref, { once: true, margin: "-60px" });
 
     return (
         <section id="education" className="relative">
             <div className="section-container">
                 <motion.div
                     ref={ref}
-                    initial={{ opacity: 0, y: 50 }}
-                    animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
-                    transition={{ duration: 0.6 }}
+                    initial={{ opacity: 0, y: 24 }}
+                    animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 24 }}
+                    transition={{ duration: 0.5, ease: "easeOut" }}
                     className="max-w-4xl mx-auto"
                 >
                     {/* Section Title */}
                     <motion.h2
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+                        initial={{ opacity: 0, y: 12 }}
+                        animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 12 }}
                         transition={{ delay: 0.1 }}
                         className="text-heading font-bold heading-font text-gradient mb-8 sm:mb-12"
                     >
@@ -31,8 +31,8 @@ export default function Education() {
 
                     {/* Education Card */}
                     <motion.div
-                        initial={{ opacity: 0, y: 30 }}
-                        animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+                        initial={{ opacity: 0, y: 16 }}
+                        animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 }}
                         transition={{ delay: 0.2 }}
                         className="glass-card theme-surface-emphasis p-5 sm:p-8 relative overflow-hidden group hover:border-[#ff7a18]/30 transition-colors"
                     >

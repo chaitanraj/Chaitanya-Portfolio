@@ -70,7 +70,7 @@ function SkillPill({ skill, index, isMobile }) {
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 8 }}
+      initial={{ opacity: 0, y: 6 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.1 }}
       // Faster animation on mobile, reduced stagger
@@ -116,7 +116,7 @@ function SkillPill({ skill, index, isMobile }) {
 
 export default function TechStack3() {
   const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
+  const isInView = useInView(ref, { once: true, margin: "-60px" });
 
   // Detect mobile for performance optimizations
   const [isMobile, setIsMobile] = useState(false);
@@ -133,16 +133,16 @@ export default function TechStack3() {
       <div className="section-container">
         <motion.div
           ref={ref}
-          initial={{ opacity: 0, y: 40 }}
-          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
-          transition={{ duration: 0.6 }}
+          initial={{ opacity: 0, y: 20 }}
+          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+          transition={{ duration: 0.5, ease: "easeOut" }}
           className="max-w-4xl mx-auto"
         >
           {/* Header */}
           <div className="flex items-end justify-between mb-5 sm:mb-7">
             <motion.div
-              initial={{ opacity: 0, y: 15 }}
-              animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 15 }}
+              initial={{ opacity: 0, y: 10 }}
+              animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
               transition={{ delay: 0.1 }}
             >
               <h2 className="text-xl sm:text-2xl md:text-5xl font-bold heading-font text-gradient">

@@ -22,9 +22,9 @@ function ProjectCard({ project, index, onClick, reduceMotion }) {
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 40 }}
+      initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
-      transition={{ delay: index * 0.08, duration: 0.45, ease: "easeOut" }}
+      transition={{ delay: index * 0.06, duration: 0.4, ease: "easeOut" }}
       viewport={{ once: true, amount: 0.2 }}
       onClick={onClick}
       className={cn(
@@ -246,7 +246,7 @@ export default function Projects() {
   const scrollRef = useRef(null);
   const sectionRef = useRef(null);
 
-  const isInView = useInView(sectionRef, { once: true, margin: "-100px" });
+  const isInView = useInView(sectionRef, { once: true, margin: "-60px" });
 
   const getCards = useCallback(() => {
     if (!scrollRef.current) return [];
@@ -318,15 +318,15 @@ export default function Projects() {
       <div className="section-container">
         <motion.div
           ref={sectionRef}
-          initial={{ opacity: 0, y: 40 }}
-          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
-          transition={{ duration: 0.5, ease: "easeOut" }}
+          initial={{ opacity: 0, y: 20 }}
+          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+          transition={{ duration: 0.45, ease: "easeOut" }}
         >
           {/* Section Header */}
           <div className="flex items-center justify-between mb-5 sm:mb-8">
             <motion.h2
-              initial={{ opacity: 0, y: 20 }}
-              animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 12 }}
+              animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 12 }}
               transition={{ delay: 0.1 }}
               className="text-heading font-bold heading-font text-gradient"
             >

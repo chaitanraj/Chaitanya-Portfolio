@@ -6,7 +6,7 @@ import { Mail, Linkedin, Github, Download, MapPin } from "lucide-react";
 
 export default function Contact() {
   const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
+  const isInView = useInView(ref, { once: true, margin: "-60px" });
 
   const email = "chaitanya21.raj@gmail.com";
   const linkedinUrl = "https://www.linkedin.com/in/chaitanya-raj-93033528b/";
@@ -17,15 +17,15 @@ export default function Contact() {
       <div className="section-container">
         <motion.div
           ref={ref}
-          initial={{ opacity: 0, y: 50 }}
-          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
-          transition={{ duration: 0.6 }}
+          initial={{ opacity: 0, y: 24 }}
+          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 24 }}
+          transition={{ duration: 0.5, ease: "easeOut" }}
           className="max-w-4xl mx-auto text-center theme-surface-emphasis border border-[var(--color-glass-border)] rounded-[20px] sm:rounded-[24px] backdrop-blur-xl shadow-[0_20px_60px_var(--color-shadow-card)] px-4 py-7 sm:px-8 sm:py-10 md:px-10 md:py-12"
         >
           {/* Section Title */}
           <motion.h2
-            initial={{ opacity: 0, y: 20 }}
-            animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 12 }}
+            animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 12 }}
             transition={{ delay: 0.1 }}
             className="text-3xl sm:text-4xl md:text-5xl font-bold heading-font mb-4 sm:mb-6 text-gradient"
           >
@@ -34,8 +34,8 @@ export default function Contact() {
 
           {/* Contact Message */}
           <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 12 }}
+            animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 12 }}
             transition={{ delay: 0.2 }}
             className="text-sm sm:text-base md:text-lg text-center theme-text-secondary mb-4 sm:mb-5 leading-relaxed"
           >
@@ -58,8 +58,8 @@ export default function Contact() {
 
           {/* Contact Buttons */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 12 }}
+            animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 12 }}
             transition={{ delay: 0.35 }}
             className="flex flex-wrap items-center justify-center gap-2.5 sm:gap-4 mb-7 sm:mb-10"
           >
@@ -103,8 +103,8 @@ export default function Contact() {
 
           {/* Location */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 12 }}
+            animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 12 }}
             transition={{ delay: 0.4 }}
             className="flex items-center justify-center gap-2 theme-text-muted text-xs sm:text-sm"
           >

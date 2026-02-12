@@ -7,22 +7,22 @@ import { experience } from "@/lib/data";
 
 export default function Experience() {
     const ref = useRef(null);
-    const isInView = useInView(ref, { once: true, margin: "-100px" });
+    const isInView = useInView(ref, { once: true, margin: "-60px" });
 
     return (
         <section id="experience" className="relative">
             <div className="section-container">
                 <motion.div
                     ref={ref}
-                    initial={{ opacity: 0, y: 50 }}
-                    animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
-                    transition={{ duration: 0.6 }}
+                    initial={{ opacity: 0, y: 24 }}
+                    animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 24 }}
+                    transition={{ duration: 0.5, ease: "easeOut" }}
                     className="max-w-4xl mx-auto"
                 >
                     {/* Section Title */}
                     <motion.h2
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+                        initial={{ opacity: 0, y: 12 }}
+                        animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 12 }}
                         transition={{ delay: 0.1 }}
                         className="text-heading font-bold heading-font text-gradient mb-8 sm:mb-12"
                     >
@@ -46,9 +46,9 @@ export default function Experience() {
                             {experience.map((exp, index) => (
                                 <motion.div
                                     key={exp.company}
-                                    initial={{ opacity: 0, x: index % 2 === 0 ? -50 : 50 }}
-                                    animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: index % 2 === 0 ? -50 : 50 }}
-                                    transition={{ delay: 0.2 + index * 0.2, duration: 0.5 }}
+                                    initial={{ opacity: 0, x: index % 2 === 0 ? -30 : 30 }}
+                                    animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: index % 2 === 0 ? -30 : 30 }}
+                                    transition={{ delay: 0.2 + index * 0.15, duration: 0.45, ease: "easeOut" }}
                                     className={`relative flex flex-col md:flex-row items-start gap-4 sm:gap-6 ${index % 2 === 1 ? "md:flex-row-reverse" : ""
                                         }`}
                                 >

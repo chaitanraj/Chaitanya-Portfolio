@@ -59,18 +59,18 @@ export default function Hero() {
     <section id="home" className="relative overflow-hidden">
       {/* Left Orange Glow */}
       <motion.div
-        initial={{ opacity: 0, scale: 0.5 }}
+        initial={{ opacity: 0, scale: 0.8 }}
         animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 1.5, ease: "easeOut" }}
+        transition={{ duration: 1.2, ease: [0.25, 0.46, 0.45, 0.94] }}
         className="absolute top-1/3 left-0 w-[180px] h-[180px] sm:w-[260px] sm:h-[260px] rounded-full bg-[rgba(255,122,24,0.22)] blur-[110px] sm:blur-[120px]"
         style={{ zIndex: 1 }}
       />
 
       {/* Right Purple Glow */}
       <motion.div
-        initial={{ opacity: 0, scale: 0.5 }}
+        initial={{ opacity: 0, scale: 0.8 }}
         animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 1.5, ease: "easeOut" }}
+        transition={{ duration: 1.2, ease: [0.25, 0.46, 0.45, 0.94] }}
         className="absolute top-1/4 right-0 w-[190px] h-[190px] sm:w-[280px] sm:h-[280px] rounded-full bg-[rgba(201,24,255,0.22)] blur-[110px] sm:blur-[120px]"
         style={{ zIndex: 1 }}
       />
@@ -82,9 +82,9 @@ export default function Hero() {
           <div className="flex-1 text-left">
             {/* Greeting */}
             <motion.p
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8 }}
+              transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
               className="text-[#ff7a18] text-[15px] sm:text-lg font-semibold mb-2 sm:mb-3"
             >
               Hello, I&apos;m
@@ -92,9 +92,9 @@ export default function Hero() {
 
             {/* Name */}
             <motion.h1
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.1 }}
+              transition={{ duration: 0.6, delay: 0.06, ease: [0.25, 0.46, 0.45, 0.94] }}
               className="text-display font-bold heading-font text-gradient mb-4 leading-tight"
             >
               {personalInfo.name}
@@ -102,9 +102,9 @@ export default function Hero() {
 
             {/* Title */}
             <motion.h2
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
+              transition={{ duration: 0.6, delay: 0.12, ease: [0.25, 0.46, 0.45, 0.94] }}
               className="text-[15px] sm:text-lg md:text-xl theme-text-primary font-semibold mb-2.5 sm:mb-4"
             >
               {personalInfo.title}
@@ -112,9 +112,9 @@ export default function Hero() {
 
             {/* Subtitle */}
             <motion.p
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.3 }}
+              transition={{ duration: 0.6, delay: 0.18, ease: [0.25, 0.46, 0.45, 0.94] }}
               className="text-[12px] sm:text-sm md:text-base theme-text-secondary mb-5 sm:mb-7 max-w-md leading-relaxed"
             >
               {personalInfo.subtitle}
@@ -122,9 +122,9 @@ export default function Hero() {
 
             {/* CTA Buttons */}
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.4 }}
+              transition={{ duration: 0.6, delay: 0.24, ease: [0.25, 0.46, 0.45, 0.94] }}
               className="flex flex-wrap items-center gap-2 sm:gap-3 mb-5 sm:mb-7"
             >
               <Button variant="primary" size="sm" asChild>
@@ -140,9 +140,9 @@ export default function Hero() {
 
             {/* Social Links */}
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.5 }}
+              transition={{ duration: 0.6, delay: 0.30, ease: [0.25, 0.46, 0.45, 0.94] }}
               className="flex items-center gap-2 sm:gap-3"
             >
               {[
@@ -180,9 +180,9 @@ export default function Hero() {
 
           {/* Right Column - Terminal */}
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.3 }}
+            transition={{ duration: 0.6, delay: 0.18, ease: [0.25, 0.46, 0.45, 0.94] }}
             className="flex-1 w-full"
           >
             <div className="terminal">
