@@ -64,6 +64,21 @@ const skills = [
   { name: "Chrome Extensions", icon: FaChrome, color: "#4285F4" },
 ];
 
+const span = document.getElementById("shaketext");
+
+function handleMotionEvent(event) {
+  const x = event.accelerationIncludingGravity.x;
+  const y = event.accelerationIncludingGravity.y;
+  const z = event.accelerationIncludingGravity.z;
+  const value=Math.abs(x)+Math.abs(y)+Math.abs(z);
+
+  if(value>10){
+    span.textContent="Thanks for the shake"
+  }
+}
+
+window.addEventListener("devicemotion", handleMotionEvent);
+
 // Single Skill Pill Component - Optimized for mobile performance
 function SkillPill({ skill, index, isMobile }) {
   const Icon = skill.icon;
@@ -184,7 +199,7 @@ export default function TechStack3() {
                     strokeLinejoin="round"
                   />
                 </svg>
-                <span className="text-gray-400">Drag the pills</span>
+                <span className="text-gray-400" id="shaketext">Drag the pills</span>
                 <span className="text-lg sm:text-xl">🫳</span>
               </motion.div>
             </motion.div>
