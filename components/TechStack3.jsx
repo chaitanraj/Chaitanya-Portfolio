@@ -130,7 +130,7 @@ useEffect(() => {
 
     const value = Math.abs(x) + Math.abs(y) + Math.abs(z);
 
-    if (value > 20 && span) {
+    if (value > 30 && span) {
       span.textContent = "Thanks for the shake";
     }
   }
@@ -179,7 +179,7 @@ useEffect(() => {
               initial={{ opacity: 0, x: -10 }}
               animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -10 }}
               transition={{ delay: 0.3 }}
-              className="flex items-center gap-2 text-gray-300 text-md sm:text-lg italic font-bold mb-1 sm:mb-2 select-none"
+              className="flex items-center gap-2 text-gray-300 text-xs italic font-bold mb-1 sm:mb-2 select-none"
             >
               <motion.div
                 animate={{ x: [0, 8, 0] }}
