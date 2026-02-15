@@ -28,7 +28,7 @@ import {
 import { FaJava, FaChrome } from "react-icons/fa";
 import { TbChartLine, TbAlertTriangle } from "react-icons/tb";
 import { MdOutlineTimer } from "react-icons/md";
-import { Vibrate } from "lucide-react";
+import { DatabaseBackup, DatabaseIcon, GitBranch, Vibrate } from "lucide-react";
 
 // Skills data with icons
 const skills = [
@@ -47,6 +47,7 @@ const skills = [
   { name: "CSS", icon: SiCss3, color: "#1572B6" },
 
   { name: "MongoDB", icon: SiMongodb, color: "#47A248" },
+  { name: "VectorDB", icon: DatabaseBackup, color: "#cd5915ff" },
   { name: "PostgreSQL", icon: SiPostgresql, color: "#4169E1" },
   { name: "MySQL", icon: SiMysql, color: "#4479A1" },
   { name: "Prisma ORM", icon: SiPrisma, color: "#2D3748" },
@@ -58,6 +59,8 @@ const skills = [
   { name: "GitHub", icon: SiGithub, color: "var(--color-text-primary)" },
 
   { name: "Prophet", icon: TbChartLine, color: "#ff7a18" },
+  { name: "LangChain", icon: GitBranch, color: "#4971e6ff" },
+  { name: "RAG", icon: DatabaseIcon, color: "#ed6ca4ff" },
   { name: "pandas", icon: SiPandas, color: "#150458" },
   { name: "NumPy", icon: SiNumpy, color: "#013243" },
   { name: "Isolation Forest", icon: TbAlertTriangle, color: "#ff4d6d" },
@@ -70,8 +73,8 @@ const skills = [
 function SkillPill({ skill, index, isMobile }) {
   const Icon = skill.icon;
   if (isMobile) {
-    return ( 
-       <motion.div
+    return (
+      <motion.div
         initial={{ opacity: 0, y: 6 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{
@@ -97,7 +100,7 @@ function SkillPill({ skill, index, isMobile }) {
           style={{ color: skill.color }}
         />
         <span className="font-medium theme-text-primary whitespace-nowrap text-[11px] sm:text-sm">
-            {skill.name}
+          {skill.name}
         </span>
       </motion.div>
     );
@@ -141,7 +144,7 @@ function SkillPill({ skill, index, isMobile }) {
           style={{ color: skill.color }}
         />
         <span className="font-medium theme-text-primary whitespace-nowrap text-[11px] sm:text-sm">
-            {skill.name}
+          {skill.name}
         </span>
       </motion.div>
     );
@@ -156,7 +159,7 @@ export default function TechStack3() {
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
-    
+
     function handleMotionEvent(event) {
       const span = document.getElementById("shaketext");
       if (!span) return;
@@ -167,16 +170,16 @@ export default function TechStack3() {
       const value = Math.abs(x) + Math.abs(y) + Math.abs(z);
 
       if (value > 25) {
-      span.textContent = "Thanks for the shake!";
-      
-      // Reset after 2 seconds
-      setTimeout(() => {
-        const currentSpan = document.getElementById("shaketext");
-        if (currentSpan) {
-          currentSpan.textContent = "Shake your phone";
-        }
-      }, 3000);
-    }
+        span.textContent = "Thanks for the shake!";
+
+        // Reset after 2 seconds
+        setTimeout(() => {
+          const currentSpan = document.getElementById("shaketext");
+          if (currentSpan) {
+            currentSpan.textContent = "Shake your phone";
+          }
+        }, 3000);
+      }
     }
 
     window.addEventListener("devicemotion", handleMotionEvent);
@@ -269,15 +272,15 @@ export default function TechStack3() {
 
           {/* Skills Container */}
           <motion.div
-  initial={{ opacity: 0 }}
-  animate={{ opacity: 1 }}  // ✅ Always visible once mounted
-  transition={{ delay: 0.2, duration: 0.5 }}
-  className="flex flex-wrap sm:justify-start gap-0.5 sm:gap-1"
->
-  {skills.map((skill, index) => (
-    <SkillPill key={skill.name} skill={skill} index={index} isMobile={isMobile} />
-  ))}
-</motion.div>
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}  // ✅ Always visible once mounted
+            transition={{ delay: 0.2, duration: 0.5 }}
+            className="flex flex-wrap sm:justify-start gap-0.5 sm:gap-1"
+          >
+            {skills.map((skill, index) => (
+              <SkillPill key={skill.name} skill={skill} index={index} isMobile={isMobile} />
+            ))}
+          </motion.div>
         </motion.div>
       </div>
     </section>
