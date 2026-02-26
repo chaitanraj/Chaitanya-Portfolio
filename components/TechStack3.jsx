@@ -91,6 +91,7 @@ function SkillPill({ skill, index, isMobile, explode }) {
               y: 0,
               rotate: 0,
               scale: 1,
+              opacity: 1,
             }
         }
         transition={{
@@ -213,7 +214,18 @@ export default function TechStack3() {
           explodeRotate: Math.random() * 360,
         })));
 
-        setExplode(true);
+        setShakeText("Thanks for the shake!");
+
+        // Explode after 500ms delay
+        setTimeout(() => {
+          setExplode(true);
+        }, 500);
+
+        // Reset after 3.5s total (500ms delay + 3s visible)
+        setTimeout(() => {
+          setExplode(false);
+          setShakeText("Shake your phone");
+        }, 3500);
       }
     }
 
