@@ -35,14 +35,14 @@ export default function Hero() {
         });
 
         setCurrentCharIndex((prev) => prev + 1);
-      }, 30);
+      }, 50);
 
       return () => clearTimeout(timeout);
     } else {
       const timeout = setTimeout(() => {
         setCurrentLineIndex((prev) => prev + 1);
         setCurrentCharIndex(0);
-      }, 500);
+      }, 650);
 
       return () => clearTimeout(timeout);
     }
@@ -197,10 +197,18 @@ export default function Hero() {
                 {displayedLines.map((line, index) => (
                   <p key={index} className="theme-text-secondary">
                     <span className="text-[#ff7a18]">$</span> {line}
+                    {isTyping && index === currentLineIndex && (
+                      <span className="cursor-blink translate-y-[1px]"></span>
+                    )}
                   </p>
                 ))}
 
-                {isTyping && <span className="cursor-blink"></span>}
+                {isTyping && currentLineIndex >= displayedLines.length && (
+                  <p className="theme-text-secondary">
+                    <span className="text-[#ff7a18]">$</span>
+                    <span className="cursor-blink translate-y-[1px] ml-1"></span>
+                  </p>
+                )}
               </div>
             </div>
           </motion.div>

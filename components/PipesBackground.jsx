@@ -9,15 +9,16 @@ const COLORS = [
     { r: 201, g: 24, b: 255 },   // Purple #c918ff
 ];
 
-// Tuned for slightly denser and more frequent motion
+// Tuned for medium-pace, always-visible pipes across all screen sizes
 const PIPE_SETTINGS = {
     gridSize: 68,
-    areaPerPipe: 120000,
-    maxPipes: 8,
+    areaPerPipe: 140000,
+    maxPipes: 6,
+    minPipes: 3,
     turnChance: 0.35,
-    minSpeed: 1.7,
-    speedVariance: 0.9,
-    flowRate: 1.8,
+    minSpeed: 0.6,
+    speedVariance: 0.3,
+    flowRate: 0.8,
 };
 
 // Pipe class for managing individual pipes
@@ -59,7 +60,7 @@ class Pipe {
 
         this.color = COLORS[Math.floor(Math.random() * COLORS.length)];
         this.segments = [{ x: this.x, y: this.y }];
-        this.maxSegments = 25 + Math.floor(Math.random() * 20);
+        this.maxSegments = 30 + Math.floor(Math.random() * 25);
         this.speed = PIPE_SETTINGS.minSpeed + Math.random() * PIPE_SETTINGS.speedVariance;
         this.opacity = 0;
         this.fadeIn = true;
@@ -86,8 +87,8 @@ class Pipe {
         const dx = [0, 1, 0, -1][this.direction] * this.speed;
         const dy = [-1, 0, 1, 0][this.direction] * this.speed;
 
-        this.x += dx * this.gridSize * 0.1;
-        this.y += dy * this.gridSize * 0.1;
+        this.x += dx * this.gridSize * 0.035;
+        this.y += dy * this.gridSize * 0.035;
 
         // Add segment at grid points
         const lastSeg = this.segments[this.segments.length - 1];
@@ -143,7 +144,7 @@ class Pipe {
         const distFromCenter = Math.sqrt(Math.pow(avgX - centerX, 2) + Math.pow(avgY - centerY, 2));
         const maxDist = Math.sqrt(Math.pow(centerX, 2) + Math.pow(centerY, 2));
         const centerFade = Math.min(1, distFromCenter / (maxDist * 0.5));
-        const finalOpacity = this.opacity * 0.25 * (0.3 + centerFade * 0.7);
+        const finalOpacity = this.opacity * 0.25 * (0.4 + centerFade * 0.6);
 
         // Pipe glow
         ctx.strokeStyle = `rgba(${r}, ${g}, ${b}, ${finalOpacity})`;
@@ -217,7 +218,8 @@ export default function PipesBackground() {
         const pipeCount = Math.floor((canvas.width * canvas.height) / PIPE_SETTINGS.areaPerPipe);
         pipesRef.current = [];
 
-        for (let i = 0; i < Math.min(pipeCount, PIPE_SETTINGS.maxPipes); i++) {
+        const actualCount = Math.max(PIPE_SETTINGS.minPipes, Math.min(pipeCount, PIPE_SETTINGS.maxPipes));
+        for (let i = 0; i < actualCount; i++) {
             const pipe = new Pipe(canvas, gridSize);
             pipe.opacity = Math.random(); // Stagger initial opacity
             pipesRef.current.push(pipe);

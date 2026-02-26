@@ -96,9 +96,10 @@ function SkillPill({ skill, index, isMobile, explode }) {
         }
         transition={{
           type: "spring",
-          stiffness: 60,
-          damping: 14,
-          delay: index * 0.015,
+          stiffness: 30,
+          damping: 18,
+          mass: 1.2,
+          delay: index * 0.02,
         }}
         whileTap={{ scale: 1.2 }}
         className="
@@ -225,7 +226,7 @@ export default function TechStack3() {
         setTimeout(() => {
           setExplode(false);
           setShakeText("Shake your phone");
-        }, 3500);
+        }, 2000);
       }
     }
 
