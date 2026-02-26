@@ -70,17 +70,34 @@ const skills = [
 
 
 // Single Skill Pill Component
-function SkillPill({ skill, index, isMobile }) {
+function SkillPill({ skill, index, isMobile, explode }) {
   const Icon = skill.icon;
+
   if (isMobile) {
     return (
       <motion.div
         initial={{ opacity: 0, y: 6 }}
-        animate={{ opacity: 1, y: 0 }}
+        animate={
+          explode
+            ? {
+              x: skill.explodeX,
+              y: skill.explodeY,
+              rotate: skill.explodeRotate,
+              scale: 0.8,
+              opacity: 0.7,
+            }
+            : {
+              x: 0,
+              y: 0,
+              rotate: 0,
+              scale: 1,
+            }
+        }
         transition={{
-          delay: Math.min(index * 0.01, 0.15),
-          duration: 0.3,
-          ease: "easeOut",
+          type: "spring",
+          stiffness: 60,
+          damping: 14,
+          delay: index * 0.015,
         }}
         whileTap={{ scale: 1.2 }}
         className="
@@ -94,6 +111,8 @@ function SkillPill({ skill, index, isMobile }) {
         sm:px-4 sm:py-2 sm:text-sm
         pill-item
       "
+
+
       >
         <Icon
           className="shrink-0 h-3.5 w-3.5 sm:h-4 sm:w-4"
@@ -152,33 +171,49 @@ function SkillPill({ skill, index, isMobile }) {
 }
 
 export default function TechStack3() {
-
+  const [shakeText, setShakeText] = useState("Shake your phone");
+  const [explode, setExplode] = useState(false);
+  const [explodeSkills, setExplodeSkills] = useState(skills); // skills with explosion data
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-60px" });
   // Detect mobile for performance optimizations
   const [isMobile, setIsMobile] = useState(false);
 
+  // Pre-compute screen-relative explosion values once on mount
+  useEffect(() => {
+    const w = window.innerWidth;
+    const h = window.innerHeight;
+    setExplodeSkills(skills.map(skill => ({
+      ...skill,
+      explodeX: (Math.random() - 0.5) * w,
+      explodeY: (Math.random() - 0.5) * h,
+      explodeRotate: Math.random() * 360,
+    })));
+  }, []);
+
+  // handle shake on phone
   useEffect(() => {
 
     function handleMotionEvent(event) {
-      const span = document.getElementById("shaketext");
-      if (!span) return;
       const x = event.accelerationIncludingGravity?.x || 0;
       const y = event.accelerationIncludingGravity?.y || 0;
       const z = event.accelerationIncludingGravity?.z || 0;
 
       const value = Math.abs(x) + Math.abs(y) + Math.abs(z);
 
-      if (value > 25) {
-        span.textContent = "Thanks for the shake!";
+      if (value > 30 && !explode) {
 
-        // Reset after 2 seconds
-        setTimeout(() => {
-          const currentSpan = document.getElementById("shaketext");
-          if (currentSpan) {
-            currentSpan.textContent = "Shake your phone";
-          }
-        }, 3000);
+        const w = window.innerWidth;
+        const h = window.innerHeight;
+
+        setExplodeSkills(skills.map(skill => ({
+          ...skill,
+          explodeX: (Math.random() - 0.5) * w,
+          explodeY: (Math.random() - 0.5) * h,
+          explodeRotate: Math.random() * 360,
+        })));
+
+        setExplode(true);
       }
     }
 
@@ -187,7 +222,7 @@ export default function TechStack3() {
     return () => {
       window.removeEventListener("devicemotion", handleMotionEvent);
     };
-  }, [isMobile]);
+  }, [isMobile, explode]);
 
 
   useEffect(() => {
@@ -260,7 +295,7 @@ export default function TechStack3() {
                 ) : (
                   <>
                     <span className="text-gray-400" id="shaketext">
-                      Shake your phone
+                      {shakeText}
                     </span>
                     <Vibrate className="w-5 h-5 text-gray-400" />
                   </>
@@ -277,8 +312,8 @@ export default function TechStack3() {
             transition={{ delay: 0.2, duration: 0.5 }}
             className="flex flex-wrap sm:justify-start gap-0.5 sm:gap-1"
           >
-            {skills.map((skill, index) => (
-              <SkillPill key={skill.name} skill={skill} index={index} isMobile={isMobile} />
+            {explodeSkills.map((skill, i) => (
+              <SkillPill key={skill.name} skill={skill} index={i} isMobile={isMobile} explode={explode} />
             ))}
           </motion.div>
         </motion.div>
