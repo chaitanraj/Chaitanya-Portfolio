@@ -3,34 +3,19 @@
 import { useRef, useState, useEffect } from "react";
 import { motion, useInView } from "framer-motion";
 import {
-  SiReact,
-  SiNextdotjs,
-  SiNodedotjs,
-  SiExpress,
-  SiFlask,
-  SiTailwindcss,
-  SiJavascript,
-  SiTypescript,
-  SiPython,
-  SiHtml5,
-  SiCss3,
-  SiMongodb,
-  SiPostgresql,
-  SiMysql,
-  SiPrisma,
-  SiSequelize,
-  SiDocker,
-  SiGit,
-  SiGithub,
-  SiPandas,
-  SiNumpy,
+  SiReact, SiNextdotjs, SiNodedotjs, SiExpress, SiFlask,
+  SiTailwindcss, SiJavascript, SiTypescript, SiPython,
+  SiHtml5, SiCss3, SiMongodb, SiPostgresql, SiMysql,
+  SiPrisma, SiSequelize, SiDocker, SiGit, SiGithub,
+  SiPandas, SiNumpy,
 } from "react-icons/si";
 import { FaJava, FaChrome } from "react-icons/fa";
 import { TbChartLine, TbAlertTriangle } from "react-icons/tb";
 import { MdOutlineTimer } from "react-icons/md";
 import { DatabaseBackup, DatabaseIcon, GitBranch, Vibrate } from "lucide-react";
 
-// Skills data with icons
+/* ---------------- SKILLS ---------------- */
+
 const skills = [
   { name: "React.js", icon: SiReact, color: "#61DAFB" },
   { name: "Next.js", icon: SiNextdotjs, color: "var(--color-text-primary)" },
@@ -68,97 +53,63 @@ const skills = [
   { name: "Chrome Extensions", icon: FaChrome, color: "#4285F4" },
 ];
 
+/* ---------------- SKILL PILL ---------------- */
 
-// Single Skill Pill Component
 function SkillPill({ skill, index, isMobile, explode }) {
   const Icon = skill.icon;
 
+  /* ---------- MOBILE EXPLODE ---------- */
   if (isMobile) {
+    const total = skills.length;
+    const angle = (index / total) * Math.PI * 2;
+    const radius = 120;
+
+    const explodeX = Math.cos(angle) * radius;
+    const explodeY = Math.sin(angle) * radius;
+
     return (
       <motion.div
-        initial={{ opacity: 0, y: 6 }}
+        initial={{ opacity: 0, scale: 0.85 }}
         animate={
           explode
             ? {
-              x: skill.explodeX,
-              y: skill.explodeY,
-              rotate: skill.explodeRotate,
-              scale: 0.8,
-              opacity: 0.7,
-            }
+                x: explodeX,
+                y: explodeY,
+                rotate: angle * 25,
+                scale: [1, 0.92, 1.15],
+                filter: "blur(1.5px)",
+                opacity: 1,
+              }
             : {
-              x: 0,
-              y: 0,
-              rotate: 0,
-              scale: 1,
-              opacity: 1,
-            }
+                x: 0,
+                y: 0,
+                rotate: 0,
+                scale: 1,
+                filter: "blur(0px)",
+                opacity: 1,
+              }
         }
         transition={{
           type: "spring",
-          stiffness: 30,
-          damping: 18,
-          mass: 1.2,
-          delay: index * 0.02,
+          stiffness: 260,
+          damping: 22,
+          mass: 0.7,
+          delay: index * 0.015,
         }}
-        whileTap={{ scale: 1.2 }}
+        whileTap={{ scale: 1.12 }}
+        style={{ position: "relative" }}
         className="
         inline-flex items-center justify-center
         gap-1.5 sm:gap-2 rounded-lg
-        bg-[var(--color-glass-bg)] border border-dashed border-[var(--color-glass-border)]
+        bg-[var(--color-glass-bg)]
+        border border-dashed border-[var(--color-glass-border)]
         backdrop-blur-none sm:backdrop-blur-md
-        shadow-sm sm:shadow-md shadow-[var(--color-shadow-card)] sm:hover:shadow-lg
+        shadow-sm sm:shadow-md shadow-[var(--color-shadow-card)]
         transition-transform duration-150
         px-2.5 py-1 text-[11px]
         sm:px-4 sm:py-2 sm:text-sm
         pill-item
       "
-
-
-      >
-        <Icon
-          className="shrink-0 h-3.5 w-3.5 sm:h-4 sm:w-4"
-          style={{ color: skill.color }}
-        />
-        <span className="font-medium theme-text-primary whitespace-nowrap text-[11px] sm:text-sm">
-          {skill.name}
-        </span>
-      </motion.div>
-    );
-  } else {
-    return (
-      <motion.div
-        initial={{ opacity: 0, y: 6 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, amount: 0.1 }}
-        transition={{
-          delay: Math.min(index * 0.01, 0.15),
-          duration: 0.3,
-          ease: "easeOut",
-        }}
-        drag
-        dragConstraints={{ left: 0, right: 0, top: 0, bottom: 0 }}
-        dragElastic={0.95}
-        whileHover={{
-          scale: 1.05,
-          boxShadow:
-            "0 0 20px rgba(255, 122, 24, 0.25), 0 0 40px rgba(201, 24, 255, 0.15)",
-          borderColor: "rgba(255, 122, 24, 0.45)",
-        }}
-        whileTap={{ scale: 0.96 }}
-        className="
-        inline-flex items-center justify-center
-        gap-1.5 sm:gap-2 rounded-lg
-        bg-[var(--color-glass-bg)] border border-dashed border-[var(--color-glass-border)]
-        backdrop-blur-none sm:backdrop-blur-md
-        cursor-grab active:cursor-grabbing
-        shadow-sm sm:shadow-md shadow-[var(--color-shadow-card)] sm:hover:shadow-lg
-        transition-transform duration-150
-        px-2.5 py-1 text-[11px]
-        sm:px-4 sm:py-2 sm:text-sm
-        pill-item
-      "
-        style={{ willChange: "transform" }}
       >
         <Icon
           className="shrink-0 h-3.5 w-3.5 sm:h-4 sm:w-4"
@@ -170,79 +121,98 @@ function SkillPill({ skill, index, isMobile, explode }) {
       </motion.div>
     );
   }
+
+  /* ---------- DESKTOP (UNCHANGED) ---------- */
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 6 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.1 }}
+      transition={{
+        delay: Math.min(index * 0.01, 0.15),
+        duration: 0.3,
+        ease: "easeOut",
+      }}
+      drag
+      dragConstraints={{ left: 0, right: 0, top: 0, bottom: 0 }}
+      dragElastic={0.95}
+      whileHover={{
+        scale: 1.05,
+        boxShadow:
+          "0 0 20px rgba(255,122,24,0.25),0 0 40px rgba(201,24,255,0.15)",
+        borderColor: "rgba(255,122,24,0.45)",
+      }}
+      whileTap={{ scale: 0.96 }}
+      className="
+        inline-flex items-center justify-center
+        gap-1.5 sm:gap-2 rounded-lg
+        bg-[var(--color-glass-bg)] border border-dashed border-[var(--color-glass-border)]
+        backdrop-blur-none sm:backdrop-blur-md
+        cursor-grab active:cursor-grabbing
+        shadow-sm sm:shadow-md shadow-[var(--color-shadow-card)] sm:hover:shadow-lg
+        transition-transform duration-150
+        px-2.5 py-1 text-[11px]
+        sm:px-4 sm:py-2 sm:text-sm
+        pill-item
+      "
+      style={{ willChange: "transform" }}
+    >
+      <Icon
+        className="shrink-0 h-3.5 w-3.5 sm:h-4 sm:w-4"
+        style={{ color: skill.color }}
+      />
+      <span className="font-medium theme-text-primary whitespace-nowrap text-[11px] sm:text-sm">
+        {skill.name}
+      </span>
+    </motion.div>
+  );
 }
+
+/* ---------------- MAIN COMPONENT ---------------- */
 
 export default function TechStack3() {
   const [shakeText, setShakeText] = useState("Shake your phone");
   const [explode, setExplode] = useState(false);
-  const [explodeSkills, setExplodeSkills] = useState(skills); // skills with explosion data
+  const explodingRef = useRef(false);
+
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-60px" });
-  // Detect mobile for performance optimizations
+
   const [isMobile, setIsMobile] = useState(false);
 
-  // Pre-compute screen-relative explosion values once on mount
-  useEffect(() => {
-    const w = window.innerWidth;
-    const h = window.innerHeight;
-    setExplodeSkills(skills.map(skill => ({
-      ...skill,
-      explodeX: (Math.random() - 0.5) * w,
-      explodeY: (Math.random() - 0.5) * h,
-      explodeRotate: Math.random() * 360,
-    })));
-  }, []);
-
-  // handle shake on phone
-  useEffect(() => {
-
-    function handleMotionEvent(event) {
-      const x = event.accelerationIncludingGravity?.x || 0;
-      const y = event.accelerationIncludingGravity?.y || 0;
-      const z = event.accelerationIncludingGravity?.z || 0;
-
-      const value = Math.abs(x) + Math.abs(y) + Math.abs(z);
-
-      if (value > 30 && !explode) {
-
-        const w = window.innerWidth;
-        const h = window.innerHeight;
-
-        setExplodeSkills(skills.map(skill => ({
-          ...skill,
-          explodeX: (Math.random() - 0.5) * w,
-          explodeY: (Math.random() - 0.5) * h,
-          explodeRotate: Math.random() * 360,
-        })));
-
-        setShakeText("Thanks for the shake!");
-
-        // Explode after 500ms delay
-        setTimeout(() => {
-          setExplode(true);
-        }, 500);
-
-        // Reset after 3.5s total (500ms delay + 3s visible)
-        setTimeout(() => {
-          setExplode(false);
-          setShakeText("Shake your phone");
-        }, 2000);
-      }
-    }
-
-    window.addEventListener("devicemotion", handleMotionEvent);
-
-    return () => {
-      window.removeEventListener("devicemotion", handleMotionEvent);
-    };
-  }, [isMobile, explode]);
-
-
+  /* mobile detection */
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth < 640);
     checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
+  /* shake detection */
+  useEffect(() => {
+    function handleMotion(event) {
+      const { x = 0, y = 0, z = 0 } =
+        event.accelerationIncludingGravity || {};
+
+      const value = Math.abs(x) + Math.abs(y) + Math.abs(z);
+
+      if (value > 30 && !explodingRef.current) {
+        explodingRef.current = true;
+
+        setShakeText("Thanks for the shake!");
+
+        setTimeout(() => setExplode(true), 300);
+
+        setTimeout(() => {
+          setExplode(false);
+          explodingRef.current = false;
+          setShakeText("Shake your phone");
+        }, 3000);
+      }
+    }
+
+    window.addEventListener("devicemotion", handleMotion);
+    return () => window.removeEventListener("devicemotion", handleMotion);
   }, []);
 
   return (
@@ -251,82 +221,46 @@ export default function TechStack3() {
         <motion.div
           ref={ref}
           initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-          transition={{ duration: 0.5, ease: "easeOut" }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.5 }}
           className="max-w-4xl mx-auto"
         >
-          {/* Header */}
+          {/* HEADER */}
           <div className="flex justify-between items-center mb-5 sm:mb-7">
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
-              transition={{ delay: 0.1 }}
-            >
-              <h2 className="text-heading font-bold heading-font text-gradient">
-                Tech Stack
-              </h2>
-            </motion.div>
+            <h2 className="text-heading font-bold heading-font text-gradient">
+              Tech Stack
+            </h2>
 
-            {/* Drag pills hint */}
-            <motion.div
-              initial={{ opacity: 0, x: -10 }}
-              animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -10 }}
-              transition={{ delay: 0.3 }}
-              className="flex items-center gap-2 text-gray-300 text-xs italic font-bold mb-1 sm:mb-2 select-none"
-            >
-              <motion.div
-                animate={{ x: [0, 8, 0] }}
-                transition={{ repeat: Infinity, duration: 1, ease: "easeInOut" }}
-                className="flex items-center gap-1"
-              >
-                <svg
-                  width="22"
-                  height="22"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  className="text-gray-300 rotate-[135deg]"
-                >
-                  <path
-                    d="M4 12H20"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                  />
-                  <path
-                    d="M14 6L20 12L14 18"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-                {(!isMobile) ? (
-                  <>
-                    <span className="text-gray-400">Drag the pills</span>
-                    <span className="text-lg sm:text-xl">🫳</span>
-                  </>
-                ) : (
-                  <>
-                    <span className="text-gray-400" id="shaketext">
-                      {shakeText}
-                    </span>
-                    <Vibrate className="w-5 h-5 text-gray-400" />
-                  </>
-                )}
-              </motion.div>
-            </motion.div>
-
+            <div className="flex items-center gap-2 text-gray-300 text-xs italic font-bold select-none">
+              {!isMobile ? (
+                <>
+                  <span className="text-gray-400">Drag the pills</span>
+                  <span className="text-lg">🫳</span>
+                </>
+              ) : (
+                <>
+                  <span className="text-gray-400">{shakeText}</span>
+                  <Vibrate className="w-5 h-5 text-gray-400" />
+                </>
+              )}
+            </div>
           </div>
 
-          {/* Skills Container */}
+          {/* SKILLS */}
           <motion.div
             initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}  // ✅ Always visible once mounted
+            animate={{ opacity: 1 }}
             transition={{ delay: 0.2, duration: 0.5 }}
-            className="flex flex-wrap sm:justify-start gap-0.5 sm:gap-1"
+            className="relative flex flex-wrap sm:justify-start justify-center gap-0.5 sm:gap-1 overflow-visible"
           >
-            {explodeSkills.map((skill, i) => (
-              <SkillPill key={skill.name} skill={skill} index={i} isMobile={isMobile} explode={explode} />
+            {skills.map((skill, i) => (
+              <SkillPill
+                key={skill.name}
+                skill={skill}
+                index={i}
+                isMobile={isMobile}
+                explode={explode}
+              />
             ))}
           </motion.div>
         </motion.div>
