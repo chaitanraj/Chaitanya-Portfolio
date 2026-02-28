@@ -61,43 +61,49 @@ function SkillPill({ skill, index, isMobile, explode }) {
   /* ---------- MOBILE EXPLODE ---------- */
   if (isMobile) {
     const total = skills.length;
+
+    // even radial distribution
     const angle = (index / total) * Math.PI * 2;
-    const radius = 120;
+
+    // screen-based explosion radius (FULL viewport)
+    const radius =
+      Math.sqrt(window.innerWidth ** 2 + window.innerHeight ** 2) * 0.55;
 
     const explodeX = Math.cos(angle) * radius;
     const explodeY = Math.sin(angle) * radius;
 
     return (
       <motion.div
-        initial={{ opacity: 0, scale: 0.85 }}
+        initial={{ opacity: 0, scale: 0.9 }}
         animate={
           explode
             ? {
-                x: explodeX,
-                y: explodeY,
-                rotate: angle * 25,
-                scale: [1, 0.92, 1.15],
-                filter: "blur(1.5px)",
-                opacity: 1,
-              }
+              x: explodeX,
+              y: explodeY,
+              rotate: angle * 40,
+              scale: [1, 1.25, 1.18], 
+              opacity: 1,
+            }
             : {
-                x: 0,
-                y: 0,
-                rotate: 0,
-                scale: 1,
-                filter: "blur(0px)",
-                opacity: 1,
-              }
+              x: 0,
+              y: 0,
+              rotate: 0,
+              scale: 1,
+              opacity: 1,
+            }
         }
         transition={{
           type: "spring",
-          stiffness: 260,
-          damping: 22,
-          mass: 0.7,
-          delay: index * 0.015,
+          stiffness: 220,
+          damping: 20,
+          mass: 0.8,
+          delay: index * 0.012,
         }}
         whileTap={{ scale: 1.12 }}
-        style={{ position: "relative" }}
+        style={{
+          position: "relative",
+          zIndex: explode ? 999 : 1, 
+        }}
         className="
         inline-flex items-center justify-center
         gap-1.5 sm:gap-2 rounded-lg
@@ -115,13 +121,13 @@ function SkillPill({ skill, index, isMobile, explode }) {
           className="shrink-0 h-3.5 w-3.5 sm:h-4 sm:w-4"
           style={{ color: skill.color }}
         />
+
         <span className="font-medium theme-text-primary whitespace-nowrap text-[11px] sm:text-sm">
           {skill.name}
         </span>
       </motion.div>
     );
   }
-
   /* ---------- DESKTOP (UNCHANGED) ---------- */
   return (
     <motion.div
@@ -207,7 +213,7 @@ export default function TechStack3() {
           setExplode(false);
           explodingRef.current = false;
           setShakeText("Shake your phone");
-        }, 3000);
+        }, 2000);
       }
     }
 
