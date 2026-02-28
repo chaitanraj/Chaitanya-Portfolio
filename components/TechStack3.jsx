@@ -58,54 +58,54 @@ const skills = [
 function SkillPill({ skill, index, isMobile, explode }) {
   const Icon = skill.icon;
 
- if (isMobile) {
-  const total = skills.length;
+  if (isMobile) {
+    const total = skills.length;
 
-  const angle = (index / total) * Math.PI * 2;
+    // Golden-angle sunflower pattern — fills a disk evenly, center included
+    const goldenAngle = Math.PI * (3 - Math.sqrt(5));
+    const angle = index * goldenAngle;
 
-  const spreadFactor = Math.pow(index / total, 0.6); 
-  
+    // sqrt gives uniform *area* density (not just radius density)
+    const normalizedRadius = Math.sqrt((index + 0.5) / total);
+    const baseRadius = Math.min(window.innerWidth, window.innerHeight) * 0.23;
+    const radius = baseRadius * normalizedRadius;
 
-  const baseRadius = Math.min(window.innerWidth, window.innerHeight) * 0.35;
+    const explodeX = Math.cos(angle) * radius;
+    const explodeY = Math.sin(angle) * radius;
 
-  const radius = baseRadius * spreadFactor;
-
-  const explodeX = Math.cos(angle) * radius;
-  const explodeY = Math.sin(angle) * radius;
-
-  return (
-    <motion.div
-      initial={{ opacity: 0, scale: 0.9 }}
-      animate={
-        explode
-          ? {
+    return (
+      <motion.div
+        initial={{ opacity: 0, scale: 0.9 }}
+        animate={
+          explode
+            ? {
               x: explodeX,
               y: explodeY,
               rotate: angle * 25,
-              scale: [1, 1.18, 1.12], 
+              scale: [1, 1.18, 1.12],
               opacity: 1,
             }
-          : {
+            : {
               x: 0,
               y: 0,
               rotate: 0,
               scale: 1,
               opacity: 1,
             }
-      }
-      transition={{
-        type: "spring",
-        stiffness: 140,   
-        damping: 18,
-        mass: 1.1,
-        delay: index * 0.02,
-      }}
-      whileTap={{ scale: 1.12 }}
-      style={{
-        position: "relative",
-        zIndex: explode ? 20 : 1,
-      }}
-      className="
+        }
+        transition={{
+          type: "spring",
+          stiffness: 140,
+          damping: 18,
+          mass: 1.1,
+          delay: index * 0.02,
+        }}
+        whileTap={{ scale: 1.12 }}
+        style={{
+          position: "relative",
+          zIndex: explode ? 20 : 1,
+        }}
+        className="
         inline-flex items-center justify-center
         gap-1.5 sm:gap-2 rounded-lg
         bg-[var(--color-glass-bg)]
@@ -117,19 +117,19 @@ function SkillPill({ skill, index, isMobile, explode }) {
         sm:px-4 sm:py-2 sm:text-sm
         pill-item
       "
-    >
-      <Icon
-        className="shrink-0 h-3.5 w-3.5 sm:h-4 sm:w-4"
-        style={{ color: skill.color }}
-      />
+      >
+        <Icon
+          className="shrink-0 h-3.5 w-3.5 sm:h-4 sm:w-4"
+          style={{ color: skill.color }}
+        />
 
-      <span className="font-medium theme-text-primary whitespace-nowrap text-[11px] sm:text-sm">
-        {skill.name}
-      </span>
-    </motion.div>
-  );
-}
-  
+        <span className="font-medium theme-text-primary whitespace-nowrap text-[11px] sm:text-sm">
+          {skill.name}
+        </span>
+      </motion.div>
+    );
+  }
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 6 }}
