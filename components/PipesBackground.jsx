@@ -30,33 +30,14 @@ class Pipe {
     }
 
     reset() {
-        // Start from edge
-        const side = Math.floor(Math.random() * 4);
         const gridCols = Math.floor(this.canvas.width / this.gridSize);
         const gridRows = Math.floor(this.canvas.height / this.gridSize);
 
-        switch (side) {
-            case 0: // Top
-                this.x = Math.floor(Math.random() * gridCols) * this.gridSize;
-                this.y = 0;
-                this.direction = 2; // Down
-                break;
-            case 1: // Right
-                this.x = this.canvas.width;
-                this.y = Math.floor(Math.random() * gridRows) * this.gridSize;
-                this.direction = 3; // Left
-                break;
-            case 2: // Bottom
-                this.x = Math.floor(Math.random() * gridCols) * this.gridSize;
-                this.y = this.canvas.height;
-                this.direction = 0; // Up
-                break;
-            case 3: // Left
-                this.x = 0;
-                this.y = Math.floor(Math.random() * gridRows) * this.gridSize;
-                this.direction = 1; // Right
-                break;
-        }
+        // Start anywhere on the grid instead of only from edges,
+        // so pipes appear uniformly across tall mobile scrolling pages
+        this.x = Math.floor(Math.random() * gridCols) * this.gridSize;
+        this.y = Math.floor(Math.random() * gridRows) * this.gridSize;
+        this.direction = Math.floor(Math.random() * 4); // 0: Up, 1: Right, 2: Down, 3: Left
 
         this.color = COLORS[Math.floor(Math.random() * COLORS.length)];
         this.segments = [{ x: this.x, y: this.y }];
@@ -213,12 +194,17 @@ export default function PipesBackground() {
     const animationRef = useRef(null);
 
     const initPipes = useCallback((canvas) => {
-        const gridSize = PIPE_SETTINGS.gridSize;
+        const isMobile = window.innerWidth < 768;
+        const gridSize = isMobile ? 45 : PIPE_SETTINGS.gridSize;
+        const areaPerPipe = isMobile ? 50000 : PIPE_SETTINGS.areaPerPipe;
+        const maxPipes = isMobile ? 25 : PIPE_SETTINGS.maxPipes;
+        const minPipes = isMobile ? 12 : PIPE_SETTINGS.minPipes;
+
         // More pipes for full page
-        const pipeCount = Math.floor((canvas.width * canvas.height) / PIPE_SETTINGS.areaPerPipe);
+        const pipeCount = Math.floor((canvas.width * canvas.height) / areaPerPipe);
         pipesRef.current = [];
 
-        const actualCount = Math.max(PIPE_SETTINGS.minPipes, Math.min(pipeCount, PIPE_SETTINGS.maxPipes));
+        const actualCount = Math.max(minPipes, Math.min(pipeCount, maxPipes));
         for (let i = 0; i < actualCount; i++) {
             const pipe = new Pipe(canvas, gridSize);
             pipe.opacity = Math.random(); // Stagger initial opacity
@@ -227,7 +213,8 @@ export default function PipesBackground() {
     }, []);
 
     const drawGrid = useCallback((ctx, width, height, centerX, centerY) => {
-        const gridSize = 70;
+        const isMobile = window.innerWidth < 768;
+        const gridSize = isMobile ? 45 : 70;
         const isLight = document.documentElement.classList.contains('theme-light');
         const baseColor = isLight ? '0, 0, 0' : '255, 255, 255';
 
