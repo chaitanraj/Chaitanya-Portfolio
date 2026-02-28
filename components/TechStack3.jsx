@@ -67,7 +67,7 @@ function SkillPill({ skill, index, isMobile, explode }) {
 
     // sqrt gives uniform *area* density (not just radius density)
     const normalizedRadius = Math.sqrt((index + 0.5) / total);
-    const baseRadius = Math.min(window.innerWidth, window.innerHeight) * 0.23;
+    const baseRadius = Math.min(window.innerWidth, window.innerHeight) * 0.42;
     const radius = baseRadius * normalizedRadius;
 
     const explodeX = Math.cos(angle) * radius;
