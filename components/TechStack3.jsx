@@ -14,8 +14,6 @@ import { TbChartLine, TbAlertTriangle } from "react-icons/tb";
 import { MdOutlineTimer } from "react-icons/md";
 import { DatabaseBackup, DatabaseIcon, GitBranch, Vibrate } from "lucide-react";
 
-/* ---------------- SKILLS ---------------- */
-
 const skills = [
   { name: "React.js", icon: SiReact, color: "#61DAFB" },
   { name: "Next.js", icon: SiNextdotjs, color: "var(--color-text-primary)" },

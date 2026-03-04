@@ -2,7 +2,7 @@
 
 import { useCallback, useRef, useState } from "react";
 import { motion, useInView, useReducedMotion } from "framer-motion";
-import { ExternalLink, Github, ChevronLeft, ChevronRight } from "lucide-react";
+import { ExternalLink, Github, ChevronLeft, ChevronRight, ArrowUpRight } from "lucide-react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -65,6 +65,22 @@ function ProjectCard({ project, index, onClick, reduceMotion }) {
 
         {/* Glow overlay on hover */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+
+        {/* Always-visible "More" chip — overlaid on image, bottom-right */}
+        <span
+          className={cn(
+            "absolute bottom-2 right-2 z-10",
+            "flex items-center gap-1 px-2.5 py-1 rounded-full",
+            "text-[9px] sm:text-[10px] font-semibold uppercase tracking-wider",
+            "bg-cyan-500/90 shadow-lg shadow-orange-500/30 text-black backdrop-blur-md border border-white/15",
+            "transition-all duration-300",
+            "group-hover:bg-[#ff7a18]/80 group-hover:border-[#ff7a18]/40 group-hover:text-white group-hover:shadow-[0_0_12px_rgba(255,122,24,0.3)]"
+          )}
+          aria-hidden="true"
+        >
+          Explore
+          <ArrowUpRight size={10} className="transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+        </span>
       </div>
 
       {/* Card Content */}
