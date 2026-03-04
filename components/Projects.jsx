@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useRef, useState } from "react";
+import { memo, useCallback, useRef, useState } from "react";
 import { motion, useInView, useReducedMotion } from "framer-motion";
 import { ExternalLink, Github, ChevronLeft, ChevronRight, ArrowUpRight } from "lucide-react";
 import Image from "next/image";
@@ -17,7 +17,7 @@ import { projects } from "@/lib/data";
 import { cn } from "@/lib/utils";
 
 // Project Card Component
-function ProjectCard({ project, index, onClick, reduceMotion }) {
+const ProjectCard = memo(function ProjectCard({ project, index, onOpenProject, reduceMotion }) {
   const cardHoverAnimation = reduceMotion ? undefined : { scale: 1.01, y: -2 };
 
   return (
@@ -26,7 +26,7 @@ function ProjectCard({ project, index, onClick, reduceMotion }) {
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.06, duration: 0.4, ease: "easeOut" }}
       viewport={{ once: true, amount: 0.2 }}
-      onClick={onClick}
+      onClick={() => onOpenProject(project)}
       className={cn(
         "scroll-card flex-shrink-0 flex flex-col",
         "w-[248px] sm:w-[340px] lg:w-[420px]",
@@ -43,6 +43,9 @@ function ProjectCard({ project, index, onClick, reduceMotion }) {
             alt={project.title}
             fill
             sizes="(max-width: 640px) 264px, (max-width: 1024px) 340px, 420px"
+            loading="lazy"
+            decoding="async"
+            quality={75}
             draggable={false}
             className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.04] will-change-transform"
           />
@@ -166,7 +169,7 @@ function ProjectCard({ project, index, onClick, reduceMotion }) {
       </div>
     </motion.div>
   );
-}
+});
 
 // Project Modal
 function ProjectModal({ project, open, onOpenChange }) {
@@ -306,10 +309,10 @@ export default function Projects() {
 
       container.scrollTo({
         left: Math.max(0, Math.min(targetLeft, maxScrollLeft)),
-        behavior: "smooth",
+        behavior: shouldReduceMotion ? "auto" : "smooth",
       });
     },
-    [getCards]
+    [getCards, shouldReduceMotion]
   );
 
   const scrollLeft = useCallback(() => {
@@ -322,10 +325,10 @@ export default function Projects() {
     scrollToCard(currentIndex + 1);
   }, [getNearestCardIndex, scrollToCard]);
 
-  const handleProjectClick = (project) => {
+  const handleProjectClick = useCallback((project) => {
     setSelectedProject(project);
     setModalOpen(true);
-  };
+  }, []);
 
 
 
@@ -383,7 +386,7 @@ export default function Projects() {
                   project={project}
                   index={index}
                   reduceMotion={shouldReduceMotion}
-                  onClick={() => handleProjectClick(project)}
+                  onOpenProject={handleProjectClick}
                 />
               ))}
             </div>

@@ -1,13 +1,14 @@
+import dynamic from "next/dynamic";
 import Hero from "@/components/Hero";
 import About from "@/components/About";
-import Projects from "@/components/Projects";
-import Experience from "@/components/Experience";
-import Education from "@/components/Education";
-import Contact from "@/components/Contact";
-import Footer from "@/components/Footer";
-import PipesBackground from "@/components/PipesBackground";
-import TechStack3 from "@/components/TechStack3";
 import Margin from "@/components/Margin";
+
+const TechStack3 = dynamic(() => import("@/components/TechStack3"));
+const Projects = dynamic(() => import("@/components/Projects"));
+const Experience = dynamic(() => import("@/components/Experience"));
+const Education = dynamic(() => import("@/components/Education"));
+const Contact = dynamic(() => import("@/components/Contact"));
+const Footer = dynamic(() => import("@/components/Footer"));
 
 export default function Home() {
   return (

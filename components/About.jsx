@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion, useInView } from "framer-motion";
 import { aboutText, timeline } from "@/lib/data";
 import { Code2, Cpu, Rocket, MapPin } from "lucide-react";
@@ -9,14 +9,29 @@ import { Code2, Cpu, Rocket, MapPin } from "lucide-react";
 function SpotlightText({ text, containerClassName = "", textClassName = "" }) {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [isHovered, setIsHovered] = useState(false);
+  const rafRef = useRef(null);
+  const nextPositionRef = useRef({ x: 0, y: 0 });
 
   function handleMouseMove(e) {
     const rect = e.currentTarget.getBoundingClientRect();
-    setMousePosition({
+    nextPositionRef.current = {
       x: e.clientX - rect.left,
       y: e.clientY - rect.top,
+    };
+
+    if (rafRef.current) return;
+
+    rafRef.current = requestAnimationFrame(() => {
+      rafRef.current = null;
+      setMousePosition(nextPositionRef.current);
     });
   }
+
+  useEffect(() => {
+    return () => {
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+    };
+  }, []);
 
   return (
     <div

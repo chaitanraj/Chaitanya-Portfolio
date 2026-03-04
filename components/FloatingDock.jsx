@@ -59,12 +59,12 @@ export default function FloatingDock() {
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (dockRef.current && !dockRef.current.contains(e.target)) {
-        setActive("");
+        setActive((prev) => (prev ? "" : prev));
       }
     };
 
     document.addEventListener("mousedown", handleClickOutside);
-    document.addEventListener("touchstart", handleClickOutside);
+    document.addEventListener("touchstart", handleClickOutside, { passive: true });
 
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
@@ -93,8 +93,8 @@ export default function FloatingDock() {
         const mostVisible = visibleEntries.reduce((prev, curr) =>
           curr.intersectionRatio > prev.intersectionRatio ? curr : prev
         );
-
-        setActive(`#${mostVisible.target.id}`);
+        const nextActive = `#${mostVisible.target.id}`;
+        setActive((prev) => (prev === nextActive ? prev : nextActive));
       },
       {
         threshold: [0.15, 0.3, 0.5, 0.7],
@@ -118,7 +118,9 @@ export default function FloatingDock() {
         target={item.external ? "_blank" : "_self"}
         rel={item.external ? "noreferrer" : undefined}
         onClick={() => {
-          if (item.href.startsWith("#")) setActive(item.href);
+          if (item.href.startsWith("#")) {
+            setActive((prev) => (prev === item.href ? prev : item.href));
+          }
         }}
         className={`group/icon relative flex items-center justify-center w-[30px] h-[30px] sm:w-9 sm:h-9 rounded-full transition-all duration-200
           ${

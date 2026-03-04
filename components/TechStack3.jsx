@@ -180,6 +180,7 @@ export default function TechStack3() {
   const [shakeText, setShakeText] = useState("Shake your phone");
   const [explode, setExplode] = useState(false);
   const explodingRef = useRef(false);
+  const lastMotionAtRef = useRef(0);
 
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-60px" });
@@ -196,7 +197,14 @@ export default function TechStack3() {
 
   /* shake detection */
   useEffect(() => {
+    if (!isMobile || !isInView || typeof window === "undefined") return undefined;
+    if (typeof window.DeviceMotionEvent === "undefined") return undefined;
+
     function handleMotion(event) {
+      const now = performance.now();
+      if (now - lastMotionAtRef.current < 120) return;
+      lastMotionAtRef.current = now;
+
       const { x = 0, y = 0, z = 0 } =
         event.accelerationIncludingGravity || {};
 
@@ -219,7 +227,7 @@ export default function TechStack3() {
 
     window.addEventListener("devicemotion", handleMotion);
     return () => window.removeEventListener("devicemotion", handleMotion);
-  }, []);
+  }, [isInView, isMobile]);
 
   return (
     <section id="skills" className="relative">

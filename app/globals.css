@@ -1,5 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap');
-
 @import "tailwindcss";
 
 /* ============================================
@@ -1409,19 +1407,6 @@ body::before {
   filter: blur(0px);
   pointer-events: auto;
   user-select: auto;
-}
-
-/* ============================================
-   GPU COMPOSITING & SCROLL PERFORMANCE
-   ============================================ */
-
-.section-container {
-  transform: translateZ(0);
-  backface-visibility: hidden;
-}
-
-section {
-  will-change: transform, opacity;
 }
 
 @media (max-width: 640px) {

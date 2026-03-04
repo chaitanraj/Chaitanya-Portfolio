@@ -21,6 +21,9 @@ const PIPE_SETTINGS = {
     flowRate: 0.8,
 };
 
+const BASE_FRAME_TIME = 1000 / 60;
+const LOW_POWER_FRAME_TIME = 1000 / 36;
+
 // Pipe class for managing individual pipes
 class Pipe {
     constructor(canvas, gridSize) {
@@ -60,6 +63,9 @@ class Pipe {
 
         this.color = COLORS[Math.floor(Math.random() * COLORS.length)];
         this.segments = [{ x: this.x, y: this.y }];
+        this.segmentSumX = this.x;
+        this.segmentSumY = this.y;
+        this.totalLength = 1;
         this.maxSegments = 30 + Math.floor(Math.random() * 25);
         this.speed = PIPE_SETTINGS.minSpeed + Math.random() * PIPE_SETTINGS.speedVariance;
         this.opacity = 0;
@@ -69,14 +75,37 @@ class Pipe {
         this.lineWidth = 2 + Math.random() * 2;
     }
 
-    update() {
+    addSegment(x, y) {
+        const prev = this.segments[this.segments.length - 1];
+        this.totalLength += Math.abs(x - prev.x) + Math.abs(y - prev.y);
+        this.segments.push({ x, y });
+        this.segmentSumX += x;
+        this.segmentSumY += y;
+    }
+
+    trimSegments() {
+        while (this.segments.length > this.maxSegments) {
+            if (this.segments.length <= 1) break;
+            const oldest = this.segments[0];
+            const next = this.segments[1];
+            this.totalLength = Math.max(
+                1,
+                this.totalLength - (Math.abs(next.x - oldest.x) + Math.abs(next.y - oldest.y))
+            );
+            this.segmentSumX -= oldest.x;
+            this.segmentSumY -= oldest.y;
+            this.segments.shift();
+        }
+    }
+
+    update(dtScale = 1) {
         // Fade in/out
         if (this.fadeIn) {
-            this.opacity = Math.min(1, this.opacity + 0.04);
+            this.opacity = Math.min(1, this.opacity + 0.04 * dtScale);
             if (this.opacity >= 1) this.fadeIn = false;
         }
         if (this.fadeOut) {
-            this.opacity = Math.max(0, this.opacity - 0.04);
+            this.opacity = Math.max(0, this.opacity - 0.04 * dtScale);
             if (this.opacity <= 0) {
                 this.reset();
                 return;
@@ -87,8 +116,8 @@ class Pipe {
         const dx = [0, 1, 0, -1][this.direction] * this.speed;
         const dy = [-1, 0, 1, 0][this.direction] * this.speed;
 
-        this.x += dx * this.gridSize * 0.035;
-        this.y += dy * this.gridSize * 0.035;
+        this.x += dx * this.gridSize * 0.035 * dtScale;
+        this.y += dy * this.gridSize * 0.035 * dtScale;
 
         // Add segment at grid points
         const lastSeg = this.segments[this.segments.length - 1];
@@ -100,7 +129,7 @@ class Pipe {
             this.x = Math.round(this.x / this.gridSize) * this.gridSize;
             this.y = Math.round(this.y / this.gridSize) * this.gridSize;
 
-            this.segments.push({ x: this.x, y: this.y });
+            this.addSegment(this.x, this.y);
 
             // Slightly more frequent turns for livelier movement
             if (Math.random() < PIPE_SETTINGS.turnChance) {
@@ -108,10 +137,7 @@ class Pipe {
                 this.direction = turns[Math.floor(Math.random() * 2)];
             }
 
-            // Remove old segments
-            if (this.segments.length > this.maxSegments) {
-                this.segments.shift();
-            }
+            this.trimSegments();
         }
 
         // Check bounds
@@ -121,7 +147,7 @@ class Pipe {
         }
 
         // Update flow animation
-        this.flowOffset += PIPE_SETTINGS.flowRate;
+        this.flowOffset += PIPE_SETTINGS.flowRate * dtScale;
     }
 
     draw(ctx, centerX, centerY) {
@@ -139,8 +165,8 @@ class Pipe {
         ctx.lineTo(this.x, this.y);
 
         // Calculate opacity based on distance from center (fade in center)
-        const avgX = this.segments.reduce((sum, s) => sum + s.x, 0) / this.segments.length;
-        const avgY = this.segments.reduce((sum, s) => sum + s.y, 0) / this.segments.length;
+        const avgX = this.segmentSumX / this.segments.length;
+        const avgY = this.segmentSumY / this.segments.length;
         const distFromCenter = Math.sqrt(Math.pow(avgX - centerX, 2) + Math.pow(avgY - centerY, 2));
         const maxDist = Math.sqrt(Math.pow(centerX, 2) + Math.pow(centerY, 2));
         const centerFade = Math.min(1, distFromCenter / (maxDist * 0.5));
@@ -167,12 +193,7 @@ class Pipe {
     }
 
     getTotalLength() {
-        let length = 0;
-        for (let i = 1; i < this.segments.length; i++) {
-            length += Math.abs(this.segments[i].x - this.segments[i - 1].x) +
-                Math.abs(this.segments[i].y - this.segments[i - 1].y);
-        }
-        return length || 1;
+        return this.totalLength || 1;
     }
 
     drawFlowSegment(ctx, startPos, length, r, g, b, opacity) {
@@ -209,8 +230,15 @@ class Pipe {
 
 export default function PipesBackground() {
     const canvasRef = useRef(null);
+    const ctxRef = useRef(null);
     const pipesRef = useRef([]);
     const animationRef = useRef(null);
+    const resizeRafRef = useRef(null);
+    const frameStateRef = useRef({
+        lastTs: 0,
+        frameBudget: BASE_FRAME_TIME,
+    });
+    const isLightThemeRef = useRef(false);
 
     const initPipes = useCallback((canvas) => {
         const gridSize = PIPE_SETTINGS.gridSize;
@@ -226,9 +254,8 @@ export default function PipesBackground() {
         }
     }, []);
 
-    const drawGrid = useCallback((ctx, width, height, centerX, centerY) => {
+    const drawGridSlice = useCallback((ctx, width, startY, endY, centerX, centerY, isLight) => {
         const gridSize = 70;
-        const isLight = document.documentElement.classList.contains('theme-light');
         const baseColor = isLight ? '0, 0, 0' : '255, 255, 255';
 
         ctx.lineWidth = 1;
@@ -241,45 +268,106 @@ export default function PipesBackground() {
                 : 0.015 + (distFromCenter / centerX) * 0.025;
             ctx.strokeStyle = `rgba(${baseColor}, ${opacity})`;
             ctx.beginPath();
-            ctx.moveTo(x, 0);
-            ctx.lineTo(x, height);
+            ctx.moveTo(x, startY);
+            ctx.lineTo(x, endY);
             ctx.stroke();
         }
 
         // Horizontal lines
-        for (let y = 0; y <= height; y += gridSize) {
+        const firstY = Math.max(0, Math.floor(startY / gridSize) * gridSize);
+        for (let y = firstY; y <= endY; y += gridSize) {
             const distFromCenter = Math.abs(y - centerY);
             const opacity = isLight
                 ? 0.025 + (distFromCenter / centerY) * 0.035
                 : 0.015 + (distFromCenter / centerY) * 0.025;
             ctx.strokeStyle = `rgba(${baseColor}, ${opacity})`;
             ctx.beginPath();
-            ctx.moveTo(0, y);
+            ctx.moveTo(0, Math.round(y) + 0.5);
             ctx.lineTo(width, y);
             ctx.stroke();
         }
+    }, []);
+
+    const getVisibleSlice = useCallback((canvas) => {
+        const rect = canvas.getBoundingClientRect();
+
+        if (rect.bottom <= 0 || rect.top >= window.innerHeight) {
+            return null;
+        }
+
+        const startY = Math.max(0, -rect.top);
+        const endY = Math.min(canvas.height, startY + window.innerHeight);
+
+        return {
+            startY,
+            endY,
+            height: Math.max(0, endY - startY),
+        };
+    }, []);
+
+    const updateFrameBudget = useCallback(() => {
+        if (typeof window === "undefined") return;
+        const isMobileViewport = window.matchMedia("(max-width: 768px)").matches;
+        const deviceMemory = navigator.deviceMemory ?? 8;
+        const cpuCores = navigator.hardwareConcurrency ?? 8;
+        const isLowPower = isMobileViewport && (deviceMemory <= 4 || cpuCores <= 4);
+
+        frameStateRef.current.frameBudget = isLowPower ? LOW_POWER_FRAME_TIME : BASE_FRAME_TIME;
     }, []);
 
     useEffect(() => {
         const canvas = canvasRef.current;
         if (!canvas) return;
 
-        const handleResize = () => {
+        const ctx = canvas.getContext("2d", { alpha: true, desynchronized: true });
+        if (!ctx) return;
+        ctxRef.current = ctx;
+
+        const applyCanvasSize = () => {
             const parent = canvas.parentElement;
             if (parent) {
-                canvas.width = parent.offsetWidth;
+                const nextWidth = Math.max(1, Math.floor(parent.offsetWidth));
                 // Use scrollHeight to capture the full content height, not just viewport
-                canvas.height = Math.max(parent.offsetHeight, parent.scrollHeight, document.documentElement.scrollHeight);
-                initPipes(canvas);
+                const nextHeight = Math.max(
+                    1,
+                    Math.floor(Math.max(parent.offsetHeight, parent.scrollHeight, document.documentElement.scrollHeight))
+                );
+
+                if (canvas.width !== nextWidth || canvas.height !== nextHeight) {
+                    canvas.width = nextWidth;
+                    canvas.height = nextHeight;
+                    initPipes(canvas);
+                    frameStateRef.current.lastTs = 0;
+                }
             }
+            updateFrameBudget();
         };
 
-        handleResize();
-        window.addEventListener("resize", handleResize);
+        const scheduleResize = () => {
+            if (resizeRafRef.current) return;
+            resizeRafRef.current = requestAnimationFrame(() => {
+                resizeRafRef.current = null;
+                applyCanvasSize();
+            });
+        };
+
+        isLightThemeRef.current = document.documentElement.classList.contains("theme-light");
+
+        applyCanvasSize();
+        window.addEventListener("resize", scheduleResize, { passive: true });
+
+        const themeObserver = new MutationObserver(() => {
+            isLightThemeRef.current = document.documentElement.classList.contains("theme-light");
+        });
+
+        themeObserver.observe(document.documentElement, {
+            attributes: true,
+            attributeFilter: ["class", "data-theme"],
+        });
 
         // Use ResizeObserver to detect content height changes (e.g., when all sections render)
         const resizeObserver = new ResizeObserver(() => {
-            handleResize();
+            scheduleResize();
         });
 
         if (canvas.parentElement) {
@@ -287,34 +375,71 @@ export default function PipesBackground() {
         }
 
         // Start animation
-        const render = () => {
-            const ctx = canvas.getContext("2d");
+        const render = (timestamp) => {
+            const currentCtx = ctxRef.current;
+            if (!currentCtx) return;
+
+            const frameState = frameStateRef.current;
+
+            if (!frameState.lastTs) {
+                frameState.lastTs = timestamp;
+            }
+
+            const elapsed = timestamp - frameState.lastTs;
+            if (elapsed < frameState.frameBudget) {
+                animationRef.current = requestAnimationFrame(render);
+                return;
+            }
+
+            frameState.lastTs = timestamp;
+            const dtScale = Math.min(2, elapsed / BASE_FRAME_TIME);
+
             const width = canvas.width;
             const height = canvas.height;
             const centerX = width / 2;
             const centerY = height / 2;
+            const visibleSlice = getVisibleSlice(canvas);
 
-            ctx.clearRect(0, 0, width, height);
-            drawGrid(ctx, width, height, centerX, centerY);
+            const pipes = pipesRef.current;
+            for (let i = 0; i < pipes.length; i++) {
+                pipes[i].update(dtScale);
+            }
 
-            pipesRef.current.forEach((pipe) => {
-                pipe.update();
-                pipe.draw(ctx, centerX, centerY);
-            });
+            if (visibleSlice && visibleSlice.height > 0) {
+                const { startY, endY, height: visibleHeight } = visibleSlice;
+
+                currentCtx.save();
+                currentCtx.beginPath();
+                currentCtx.rect(0, startY, width, visibleHeight);
+                currentCtx.clip();
+
+                currentCtx.clearRect(0, startY, width, visibleHeight);
+                drawGridSlice(currentCtx, width, startY, endY, centerX, centerY, isLightThemeRef.current);
+
+                for (let i = 0; i < pipes.length; i++) {
+                    pipes[i].draw(currentCtx, centerX, centerY);
+                }
+
+                currentCtx.restore();
+            }
 
             animationRef.current = requestAnimationFrame(render);
         };
 
-        render();
+        animationRef.current = requestAnimationFrame(render);
 
         return () => {
-            window.removeEventListener("resize", handleResize);
+            window.removeEventListener("resize", scheduleResize);
             resizeObserver.disconnect();
+            themeObserver.disconnect();
+            if (resizeRafRef.current) {
+                cancelAnimationFrame(resizeRafRef.current);
+            }
             if (animationRef.current) {
                 cancelAnimationFrame(animationRef.current);
             }
         };
-    }, [initPipes, drawGrid]);
+    }, [drawGridSlice, getVisibleSlice, initPipes, updateFrameBudget]);
 
     return (
         <canvas
