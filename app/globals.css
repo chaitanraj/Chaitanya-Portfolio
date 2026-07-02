@@ -574,7 +574,8 @@ body {
   backdrop-filter: blur(18px);
   -webkit-backdrop-filter: blur(18px);
   box-shadow: 0 20px 60px var(--color-shadow-card);
-  transition: all 0.4s ease;
+  
+  transition: border-color 0.4s ease, box-shadow 0.4s ease;
 }
 
 .glass-card:hover {

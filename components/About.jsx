@@ -63,13 +63,12 @@ function SpotlightText({ text, containerClassName = "", textClassName = "" }) {
 
 export default function About() {
   const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-60px" });
+  const isInView = useInView(ref, { once: false, margin: "-60px" });
 
   return (
-    <section id="about" className="relative">
+    <section id="about" ref={ref} className="relative">
       <div className="section-container">
         <motion.div
-          ref={ref}
           initial={{ opacity: 0, y: 24 }}
           animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 24 }}
           transition={{ duration: 0.5, ease: "easeOut" }}
@@ -102,9 +101,9 @@ export default function About() {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 sm:gap-8 mb-10 sm:mb-14">
             {/* About Text Card */}
             <motion.div
-              initial={{ opacity: 0, y: 12 }}
-              animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 12 }}
-              transition={{ delay: 0.2 }}
+              initial={{ opacity: 0, x: -40 }}
+              animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -40 }}
+              transition={{ delay: 0.2, duration: 0.5, ease: "easeOut" }}
               className="lg:col-span-2 glass-card p-5 sm:p-7 md:p-8"
             >
               <SpotlightText
@@ -115,9 +114,9 @@ export default function About() {
 
             {/* Quick Info Card */}
             <motion.div
-              initial={{ opacity: 0, y: 12 }}
-              animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 12 }}
-              transition={{ delay: 0.25 }}
+              initial={{ opacity: 0, x: 40 }}
+              animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: 40 }}
+              transition={{ delay: 0.25, duration: 0.5, ease: "easeOut" }}
               className="glass-card p-5 sm:p-7 md:p-8"
             >
               <h3 className="text-lg sm:text-xl font-semibold theme-text-primary mb-4 sm:mb-6">

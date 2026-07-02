@@ -6,17 +6,16 @@ import { Mail, Linkedin, Github, Download, MapPin } from "lucide-react";
 
 export default function Contact() {
   const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-60px" });
+  const isInView = useInView(ref, { once: false, margin: "-60px" });
 
   const email = "chaitanya21.raj@gmail.com";
   const linkedinUrl = "https://www.linkedin.com/in/chaitanya-raj-93033528b/";
   const githubUrl = "https://github.com/chaitanraj";
 
   return (
-    <section id="contact" className="py-8 sm:py-12 relative">
+    <section id="contact" ref={ref} className="py-8 sm:py-12 relative">
       <div className="section-container">
         <motion.div
-          ref={ref}
           initial={{ opacity: 0, y: 24 }}
           animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 24 }}
           transition={{ duration: 0.5, ease: "easeOut" }}
@@ -58,9 +57,9 @@ export default function Contact() {
 
           {/* Contact Buttons */}
           <motion.div
-            initial={{ opacity: 0, y: 12 }}
-            animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 12 }}
-            transition={{ delay: 0.35 }}
+            initial={{ opacity: 0, scale: 0.9, y: 12 }}
+            animate={isInView ? { opacity: 1, scale: 1, y: 0 } : { opacity: 0, scale: 0.9, y: 12 }}
+            transition={{ delay: 0.35, type: "spring", stiffness: 200, damping: 20 }}
             className="flex flex-wrap items-center justify-center gap-2.5 sm:gap-4 mb-7 sm:mb-10"
           >
             <a

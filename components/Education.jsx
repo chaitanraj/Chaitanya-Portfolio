@@ -7,13 +7,12 @@ import { education } from "@/lib/data";
 
 export default function Education() {
     const ref = useRef(null);
-    const isInView = useInView(ref, { once: true, margin: "-60px" });
+    const isInView = useInView(ref, { once: false, margin: "-60px" });
 
     return (
-        <section id="education" className="relative">
+        <section id="education" ref={ref} className="relative">
             <div className="section-container">
                 <motion.div
-                    ref={ref}
                     initial={{ opacity: 0, y: 24 }}
                     animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 24 }}
                     transition={{ duration: 0.5, ease: "easeOut" }}
@@ -31,9 +30,9 @@ export default function Education() {
 
                     {/* Education Card */}
                     <motion.div
-                        initial={{ opacity: 0, y: 16 }}
-                        animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 }}
-                        transition={{ delay: 0.2 }}
+                        initial={{ opacity: 0, scale: 0.92, y: 16 }}
+                        animate={isInView ? { opacity: 1, scale: 1, y: 0 } : { opacity: 0, scale: 0.92, y: 16 }}
+                        transition={{ delay: 0.2, type: "spring", stiffness: 200, damping: 22 }}
                         className="glass-card theme-surface-emphasis p-5 sm:p-8 relative overflow-hidden group hover:border-[#ff7a18]/30 transition-colors"
                     >
                         {/* Animated Gradient Underline - Orange → Pink → Purple */}

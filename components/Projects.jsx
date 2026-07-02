@@ -17,15 +17,14 @@ import { projects } from "@/lib/data";
 import { cn } from "@/lib/utils";
 
 // Project Card Component
-const ProjectCard = memo(function ProjectCard({ project, index, onOpenProject, reduceMotion }) {
+const ProjectCard = memo(function ProjectCard({ project, index, onOpenProject, reduceMotion, inView }) {
   const cardHoverAnimation = reduceMotion ? undefined : { scale: 1.01, y: -2 };
 
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
+      animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
       transition={{ delay: index * 0.06, duration: 0.4, ease: "easeOut" }}
-      viewport={{ once: true, amount: 0.2 }}
       onClick={() => onOpenProject(project)}
       className={cn(
         "scroll-card flex-shrink-0 flex flex-col",
@@ -265,7 +264,7 @@ export default function Projects() {
   const scrollRef = useRef(null);
   const sectionRef = useRef(null);
 
-  const isInView = useInView(sectionRef, { once: true, margin: "-60px" });
+  const isInView = useInView(sectionRef, { once: false, margin: "-60px" });
 
   const getCards = useCallback(() => {
     if (!scrollRef.current) return [];
@@ -333,10 +332,9 @@ export default function Projects() {
 
 
   return (
-    <section id="projects" className="relative overflow-hidden">
+    <section id="projects" ref={sectionRef} className="relative overflow-hidden">
       <div className="section-container">
         <motion.div
-          ref={sectionRef}
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
           transition={{ duration: 0.45, ease: "easeOut" }}
@@ -344,9 +342,9 @@ export default function Projects() {
           {/* Section Header */}
           <div className="flex items-center justify-between mb-5 sm:mb-8">
             <motion.h2
-              initial={{ opacity: 0, y: 12 }}
-              animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 12 }}
-              transition={{ delay: 0.1 }}
+              initial={{ opacity: 0, x: -24 }}
+              animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -24 }}
+              transition={{ delay: 0.1, duration: 0.5, ease: "easeOut" }}
               className="text-heading font-bold heading-font text-gradient"
             >
               Projects
@@ -387,6 +385,7 @@ export default function Projects() {
                   index={index}
                   reduceMotion={shouldReduceMotion}
                   onOpenProject={handleProjectClick}
+                  inView={isInView}
                 />
               ))}
             </div>

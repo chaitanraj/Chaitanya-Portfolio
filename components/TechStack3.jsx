@@ -53,7 +53,7 @@ const skills = [
 
 /* ---------------- SKILL PILL ---------------- */
 
-function SkillPill({ skill, index, isMobile, explode }) {
+function SkillPill({ skill, index, isMobile, explode, inView }) {
   const Icon = skill.icon;
 
   if (isMobile) {
@@ -132,8 +132,7 @@ function SkillPill({ skill, index, isMobile, explode }) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 6 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.1 }}
+      animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 6 }}
       transition={{
         delay: Math.min(index * 0.01, 0.15),
         duration: 0.3,
@@ -187,7 +186,7 @@ export default function TechStack3() {
   const lastMotionAtRef = useRef(0);
 
   const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-60px" });
+  const isInView = useInView(ref, { once: false, margin: "-60px" });
 
   const [isMobile, setIsMobile] = useState(false);
   // Whether devicemotion is allowed to fire. Android/legacy-iOS: true right away.
@@ -272,12 +271,11 @@ export default function TechStack3() {
   }, [isInView, isMobile, motionGranted]);
 
   return (
-    <section id="skills" className="relative">
+    <section id="skills" ref={ref} className="relative">
       <div className="section-container">
         <motion.div
-          ref={ref}
           initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
           transition={{ duration: 0.5 }}
           className="max-w-4xl mx-auto"
         >
@@ -342,6 +340,7 @@ export default function TechStack3() {
                 index={i}
                 isMobile={isMobile}
                 explode={explode}
+                inView={isInView}
               />
             ))}
           </motion.div>
