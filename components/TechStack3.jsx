@@ -174,6 +174,10 @@ function SkillPill({ skill, index, isMobile, explode }) {
   );
 }
 
+/* continuous shake used for the mobile hint (and the iOS "tap to enable" prompt) */
+const SHAKE_ANIMATE = { x: [0, -3, 3, -3, 3, 0], rotate: [0, -4, 4, -4, 4, 0] };
+const SHAKE_TRANSITION = { duration: 0.7, repeat: Infinity, ease: "easeInOut" };
+
 /* ---------------- MAIN COMPONENT ---------------- */
 
 export default function TechStack3() {
@@ -186,7 +190,11 @@ export default function TechStack3() {
   const isInView = useInView(ref, { once: true, margin: "-60px" });
 
   const [isMobile, setIsMobile] = useState(false);
-  const [isIOS, setIsIOS] = useState(false);
+  // Whether devicemotion is allowed to fire. Android/legacy-iOS: true right away.
+  // iOS 13+: false until the user grants permission via a tap gesture.
+  const [motionGranted, setMotionGranted] = useState(false);
+  // iOS 13+ gates devicemotion behind DeviceMotionEvent.requestPermission()
+  const [needsMotionPermission, setNeedsMotionPermission] = useState(false);
 
   /* mobile detection */
   useEffect(() => {
@@ -196,21 +204,42 @@ export default function TechStack3() {
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
-  /* iOS detection (covers iPhone/iPod, plus iPadOS 13+ which reports as MacIntel) */
+  /* motion access model: iOS 13+ requires an explicit permission grant; everywhere else motion works immediately */
   useEffect(() => {
-    const checkIOS = () => {
-      const ua = window.navigator.userAgent;
-      setIsIOS(
-        /iPad|iPhone|iPod/.test(ua) ||
-          (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1)
-      );
+    const initMotionAccess = () => {
+      const DME = window.DeviceMotionEvent;
+      if (typeof DME === "undefined") return; // no motion sensor / API
+      if (typeof DME.requestPermission === "function") {
+        setNeedsMotionPermission(true);
+      } else {
+        setMotionGranted(true);
+      }
     };
-    checkIOS();
+    initMotionAccess();
   }, []);
+
+  /* iOS 13+ only grants motion access from inside a user gesture (a tap) */
+  const requestMotionPermission = async () => {
+    const DME = window.DeviceMotionEvent;
+    if (typeof DME?.requestPermission !== "function") {
+      setMotionGranted(true);
+      return;
+    }
+    try {
+      const result = await DME.requestPermission();
+      if (result === "granted") {
+        setMotionGranted(true);
+        setNeedsMotionPermission(false);
+      }
+    } catch {
+      // user dismissed the prompt — leave the tap hint so they can retry
+    }
+  };
 
   /* shake detection */
   useEffect(() => {
-    if (!isMobile || !isInView || typeof window === "undefined") return undefined;
+    if (!isMobile || !isInView || !motionGranted) return undefined;
+    if (typeof window === "undefined") return undefined;
     if (typeof window.DeviceMotionEvent === "undefined") return undefined;
 
     function handleMotion(event) {
@@ -240,7 +269,7 @@ export default function TechStack3() {
 
     window.addEventListener("devicemotion", handleMotion);
     return () => window.removeEventListener("devicemotion", handleMotion);
-  }, [isInView, isMobile]);
+  }, [isInView, isMobile, motionGranted]);
 
   return (
     <section id="skills" className="relative">
@@ -260,19 +289,23 @@ export default function TechStack3() {
 
             <div className="flex items-center gap-2 text-gray-300 text-xs italic font-bold select-none">
               {isMobile ? (
-                // Shake feature isn't implemented on iOS yet, so hide the hint there
-                isIOS ? null : (
+                needsMotionPermission && !motionGranted ? (
+                  // iOS 13+ needs a user tap to grant motion access before shake can fire
+                  <motion.button
+                    type="button"
+                    onClick={requestMotionPermission}
+                    className="flex items-center gap-2 cursor-pointer"
+                    animate={SHAKE_ANIMATE}
+                    transition={SHAKE_TRANSITION}
+                  >
+                    <span className="text-gray-400">Tap to enable shake</span>
+                    <Vibrate className="w-5 h-5 text-gray-400" />
+                  </motion.button>
+                ) : (
                   <motion.div
                     className="flex items-center gap-2"
-                    animate={{
-                      x: [0, -3, 3, -3, 3, 0],
-                      rotate: [0, -4, 4, -4, 4, 0],
-                    }}
-                    transition={{
-                      duration: 0.7,
-                      repeat: Infinity,
-                      ease: "easeInOut",
-                    }}
+                    animate={SHAKE_ANIMATE}
+                    transition={SHAKE_TRANSITION}
                   >
                     <span className="text-gray-400">{shakeText}</span>
                     <Vibrate className="w-5 h-5 text-gray-400" />
