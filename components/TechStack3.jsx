@@ -186,6 +186,7 @@ export default function TechStack3() {
   const isInView = useInView(ref, { once: true, margin: "-60px" });
 
   const [isMobile, setIsMobile] = useState(false);
+  const [isIOS, setIsIOS] = useState(false);
 
   /* mobile detection */
   useEffect(() => {
@@ -193,6 +194,18 @@ export default function TechStack3() {
     checkMobile();
     window.addEventListener("resize", checkMobile);
     return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
+  /* iOS detection (covers iPhone/iPod, plus iPadOS 13+ which reports as MacIntel) */
+  useEffect(() => {
+    const checkIOS = () => {
+      const ua = window.navigator.userAgent;
+      setIsIOS(
+        /iPad|iPhone|iPod/.test(ua) ||
+          (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1)
+      );
+    };
+    checkIOS();
   }, []);
 
   /* shake detection */
@@ -246,16 +259,38 @@ export default function TechStack3() {
             </h2>
 
             <div className="flex items-center gap-2 text-gray-300 text-xs italic font-bold select-none">
-              {!isMobile ? (
-                <>
+              {isMobile ? (
+                // Shake feature isn't implemented on iOS yet, so hide the hint there
+                isIOS ? null : (
+                  <motion.div
+                    className="flex items-center gap-2"
+                    animate={{
+                      x: [0, -3, 3, -3, 3, 0],
+                      rotate: [0, -4, 4, -4, 4, 0],
+                    }}
+                    transition={{
+                      duration: 0.7,
+                      repeat: Infinity,
+                      ease: "easeInOut",
+                    }}
+                  >
+                    <span className="text-gray-400">{shakeText}</span>
+                    <Vibrate className="w-5 h-5 text-gray-400" />
+                  </motion.div>
+                )
+              ) : (
+                <motion.div
+                  className="flex items-center gap-2"
+                  animate={{ x: [0, 7, -7, 0] }}
+                  transition={{
+                    duration: 1.6,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                  }}
+                >
                   <span className="text-gray-400">Drag the pills</span>
                   <span className="text-lg">🫳</span>
-                </>
-              ) : (
-                <>
-                  <span className="text-gray-400">{shakeText}</span>
-                  <Vibrate className="w-5 h-5 text-gray-400" />
-                </>
+                </motion.div>
               )}
             </div>
           </div>

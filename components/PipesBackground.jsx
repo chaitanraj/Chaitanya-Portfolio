@@ -12,9 +12,9 @@ const COLORS = [
 // Tuned for medium-pace, always-visible pipes across all screen sizes
 const PIPE_SETTINGS = {
     gridSize: 68,
-    areaPerPipe: 140000,
-    maxPipes: 6,
-    minPipes: 3,
+    areaPerPipe: 90000,
+    maxPipes: 12,
+    minPipes: 5,
     turnChance: 0.35,
     minSpeed: 0.6,
     speedVariance: 0.3,
@@ -240,19 +240,38 @@ export default function PipesBackground() {
     });
     const isLightThemeRef = useRef(false);
 
+    const getTargetPipeCount = useCallback((canvas) => {
+        const pipeCount = Math.floor((canvas.width * canvas.height) / PIPE_SETTINGS.areaPerPipe);
+        return Math.max(PIPE_SETTINGS.minPipes, Math.min(pipeCount, PIPE_SETTINGS.maxPipes));
+    }, []);
+
     const initPipes = useCallback((canvas) => {
         const gridSize = PIPE_SETTINGS.gridSize;
-        // More pipes for full page
-        const pipeCount = Math.floor((canvas.width * canvas.height) / PIPE_SETTINGS.areaPerPipe);
         pipesRef.current = [];
 
-        const actualCount = Math.max(PIPE_SETTINGS.minPipes, Math.min(pipeCount, PIPE_SETTINGS.maxPipes));
+        const actualCount = getTargetPipeCount(canvas);
         for (let i = 0; i < actualCount; i++) {
             const pipe = new Pipe(canvas, gridSize);
             pipe.opacity = Math.random(); // Stagger initial opacity
             pipesRef.current.push(pipe);
         }
-    }, []);
+    }, [getTargetPipeCount]);
+
+    // Adjust pipe count to the new canvas size without destroying existing pipes,
+    // so height-only changes (e.g. terminal typing new lines) don't wipe the background
+    const syncPipeCount = useCallback((canvas) => {
+        const targetCount = getTargetPipeCount(canvas);
+        const pipes = pipesRef.current;
+
+        while (pipes.length < targetCount) {
+            const pipe = new Pipe(canvas, PIPE_SETTINGS.gridSize);
+            pipe.opacity = Math.random();
+            pipes.push(pipe);
+        }
+        if (pipes.length > targetCount) {
+            pipes.length = targetCount;
+        }
+    }, [getTargetPipeCount]);
 
     const drawGridSlice = useCallback((ctx, width, startY, endY, centerX, centerY, isLight) => {
         const gridSize = 70;
@@ -323,6 +342,39 @@ export default function PipesBackground() {
         if (!ctx) return;
         ctxRef.current = ctx;
 
+        // Draw the current pipe state without advancing the simulation.
+        // Used by the render loop and to repaint immediately after a canvas
+        // resize (resizing blanks the bitmap, so repainting synchronously
+        // avoids a visible flicker while the terminal types new lines).
+        const paint = () => {
+            const currentCtx = ctxRef.current;
+            if (!currentCtx) return;
+
+            const width = canvas.width;
+            const centerX = width / 2;
+            const centerY = canvas.height / 2;
+            const visibleSlice = getVisibleSlice(canvas);
+
+            if (visibleSlice && visibleSlice.height > 0) {
+                const { startY, endY, height: visibleHeight } = visibleSlice;
+
+                currentCtx.save();
+                currentCtx.beginPath();
+                currentCtx.rect(0, startY, width, visibleHeight);
+                currentCtx.clip();
+
+                currentCtx.clearRect(0, startY, width, visibleHeight);
+                drawGridSlice(currentCtx, width, startY, endY, centerX, centerY, isLightThemeRef.current);
+
+                const pipes = pipesRef.current;
+                for (let i = 0; i < pipes.length; i++) {
+                    pipes[i].draw(currentCtx, centerX, centerY);
+                }
+
+                currentCtx.restore();
+            }
+        };
+
         const applyCanvasSize = () => {
             const parent = canvas.parentElement;
             if (parent) {
@@ -333,11 +385,23 @@ export default function PipesBackground() {
                     Math.floor(Math.max(parent.offsetHeight, parent.scrollHeight, document.documentElement.scrollHeight))
                 );
 
-                if (canvas.width !== nextWidth || canvas.height !== nextHeight) {
+                const widthChanged = canvas.width !== nextWidth;
+                const heightChanged = canvas.height !== nextHeight;
+
+                if (widthChanged || heightChanged) {
                     canvas.width = nextWidth;
                     canvas.height = nextHeight;
-                    initPipes(canvas);
-                    frameStateRef.current.lastTs = 0;
+
+                    if (widthChanged || pipesRef.current.length === 0) {
+                        // Real layout change (rotation, window resize) — rebuild from scratch
+                        initPipes(canvas);
+                        frameStateRef.current.lastTs = 0;
+                    } else {
+                        // Height-only growth (terminal typing, content mounting) —
+                        // keep existing pipes and their trails, just top up the count
+                        syncPipeCount(canvas);
+                    }
+                    paint();
                 }
             }
             updateFrameBudget();
@@ -394,34 +458,12 @@ export default function PipesBackground() {
             frameState.lastTs = timestamp;
             const dtScale = Math.min(2, elapsed / BASE_FRAME_TIME);
 
-            const width = canvas.width;
-            const height = canvas.height;
-            const centerX = width / 2;
-            const centerY = height / 2;
-            const visibleSlice = getVisibleSlice(canvas);
-
             const pipes = pipesRef.current;
             for (let i = 0; i < pipes.length; i++) {
                 pipes[i].update(dtScale);
             }
 
-            if (visibleSlice && visibleSlice.height > 0) {
-                const { startY, endY, height: visibleHeight } = visibleSlice;
-
-                currentCtx.save();
-                currentCtx.beginPath();
-                currentCtx.rect(0, startY, width, visibleHeight);
-                currentCtx.clip();
-
-                currentCtx.clearRect(0, startY, width, visibleHeight);
-                drawGridSlice(currentCtx, width, startY, endY, centerX, centerY, isLightThemeRef.current);
-
-                for (let i = 0; i < pipes.length; i++) {
-                    pipes[i].draw(currentCtx, centerX, centerY);
-                }
-
-                currentCtx.restore();
-            }
+            paint();
 
             animationRef.current = requestAnimationFrame(render);
         };
@@ -439,7 +481,7 @@ export default function PipesBackground() {
                 cancelAnimationFrame(animationRef.current);
             }
         };
-    }, [drawGridSlice, getVisibleSlice, initPipes, updateFrameBudget]);
+    }, [drawGridSlice, getVisibleSlice, initPipes, syncPipeCount, updateFrameBudget]);
 
     return (
         <canvas
